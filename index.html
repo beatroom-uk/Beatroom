@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#070707">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BeatRoom">
 <title>BeatRoom — Beats to sing on</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -378,11 +386,20 @@ html.ext .player,.player{bottom:0!important}
  .grid .card:not(.uptile) .cart{width:58px;height:58px}
  .toolbar::after{content:"Title";order:9;flex-basis:100%;display:none}
 }
+
+.instbtn{background:#fff!important;color:#000!important;border-color:#fff!important;box-shadow:3px 3px 0 var(--acc);min-height:34px;padding:6px 12px;font-size:11px}
+.instbtn[hidden]{display:none!important}
+.insthelp{position:fixed;left:12px;right:12px;bottom:120px;z-index:40;background:#fff;color:#000;padding:16px 18px;box-shadow:6px 6px 0 var(--acc);font-size:15px;line-height:1.45}
+.insthelp b{font-family:var(--disp);font-weight:400;font-size:20px;text-transform:uppercase;display:block;margin-bottom:4px}
+.insthelp button{margin-top:10px;background:#000;color:#fff;border:0;padding:8px 14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:12px}
+@media (display-mode: standalone){.instbtn{display:none!important}}
+@media(max-width:860px){.instbtn{position:absolute;right:max(4vw,16px);top:14px}html.ext .topin{position:relative}}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap topin">
  <a class="brand" href="#drill"><svg viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" fill="#ff5a3c"/><path d="M7 18v-6M11 21V8M15 17v-4M19 20V9M23 16v-3" stroke="#1a0703" stroke-width="2.4" stroke-linecap="round"/></svg>BeatRoom</a>
+ <button class="btn sm instbtn" id="installBtn" hidden>⬇ Install app</button>
  <nav class="tabs" id="tabs">
   <a href="#drill" data-v="drill" style="--c:var(--drill)"><i></i>UK Drill<em id="n-drill">19</em></a>
   <a href="#jazz" data-v="jazz" style="--c:var(--jazz)"><i></i>Jazz<em id="n-jazz">19</em></a>
@@ -869,6 +886,26 @@ route();renderPicker();renderTakes();ui();loadLocal();loadShared();setInterval((
 connectStore();
 if(window.claude&&window.claude.use)window.claude.use('downloads').then(d=>{downloads=d;renderTakes()}).catch(()=>{});
 }
+</script>
+<script>
+/* Installable app: service worker + Install button (kept separate from the main app code) */
+(function(){
+ try{if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('sw.js').catch(function(){})}catch(e){}
+ var btn=document.getElementById('installBtn'),deferred=null;
+ var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
+ var ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+ if(window.claude||standalone||!btn)return;
+ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;btn.hidden=false});
+ window.addEventListener('appinstalled',function(){btn.hidden=true;deferred=null});
+ if(ios)btn.hidden=false;
+ function help(html){var d=document.createElement('div');d.className='insthelp';d.setAttribute('role','dialog');d.innerHTML=html+'<br><button type="button">Got it</button>';d.querySelector('button').onclick=function(){d.remove()};document.body.appendChild(d)}
+ btn.addEventListener('click',function(){
+  if(deferred){deferred.prompt();deferred.userChoice.finally(function(){deferred=null;btn.hidden=true});return}
+  if(ios)help('<b>Install BeatRoom</b>Tap the <b style="display:inline;font-size:inherit">Share</b> button at the bottom of Safari, then <b style="display:inline;font-size:inherit">Add to Home Screen</b>.');
+  else help('<b>Install BeatRoom</b>Tap ⋮ at the top right of Chrome, then <b style="display:inline;font-size:inherit">Install app</b> or <b style="display:inline;font-size:inherit">Add to Home screen</b>.');
+ });
+ setTimeout(function(){if(!deferred&&!ios&&!standalone)btn.hidden=false},4000);
+})();
 </script>
 </body>
 </html>
