@@ -346,6 +346,18 @@ summary{text-transform:uppercase;letter-spacing:.04em;font-weight:700}
 @media(max-width:600px){.banner h1{font-size:72px!important;text-shadow:4px 4px 0 color-mix(in srgb,var(--c) 55%,transparent)}.brand{font-size:22px}.grid .card:not(.uptile)::before{font-size:18px;width:22px}.uptile b{font-size:19px!important}.shead h1{font-size:60px!important}.btn.pri{box-shadow:4px 4px 0 var(--acc)}}
 @media(max-width:600px){.bacts{flex-direction:column;align-items:stretch;gap:12px}.bacts .btn{width:100%;flex:none}.btn.pri{margin-right:5px}}
 .shead .eyebrow{color:var(--acc)!important}.shead .eyebrow::before{background:var(--acc)}
+/* player pinned to bottom, compact on phones */
+html.ext .player,.player{bottom:0!important}
+@media(max-width:860px){html.ext body,body{padding-bottom:110px!important}}
+@media(max-width:600px){
+ .pl{grid-template-columns:auto minmax(0,1fr)!important;gap:4px 12px!important;padding-block:8px 10px!important;min-height:0!important}
+ .pl .pp{width:42px!important;height:42px!important;box-shadow:3px 3px 0 var(--c,var(--acc))!important}
+ .pl .pp svg{width:15px;height:15px}
+ .pl .t b{font-size:17px!important;line-height:1.1}
+ .pl .t span{font-size:10px!important}
+ .pl .seek{grid-column:1/-1;font-size:11px;gap:8px}
+ .seek .track{height:14px}
+ .toast{bottom:122px!important}}
 </style>
 </head>
 <body>
