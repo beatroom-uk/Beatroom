@@ -221,6 +221,53 @@ summary:hover{color:#fff}
 footer{text-align:center;border-top:1px solid rgba(255,255,255,.06);margin-top:24px;padding-top:20px}
 @media(max-width:600px){.card:hover{transform:none}.card .cart{margin:6px 6px 0}.bstats span{padding:4px 10px;font-size:13px}}
 @media(prefers-reduced-motion:reduce){.card,.btn,.uptile,.card .cart .pp{transition:none}}
+
+/* ---- layout v2: album header + track list (visual only) ---- */
+.bgrid{grid-template-columns:minmax(200px,300px) minmax(0,1fr);gap:clamp(20px,4vw,44px);align-items:end}
+.bgrid>div:first-child{order:2}
+.vizbox{order:1;aspect-ratio:1/1;border-radius:20px}
+.vizbox .np{top:auto;bottom:12px;font-size:13px}
+.banner h1{font-size:clamp(46px,7vw,92px);margin:4px 0 10px}
+.toolbar{max-width:1240px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;counter-reset:trk}
+@media(min-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px}}
+.grid .card:not(.uptile){counter-increment:trk;flex-direction:row;align-items:center;gap:14px;padding:10px 12px 10px 14px;border-radius:14px;min-height:0}
+.grid .card:not(.uptile)::before{content:counter(trk);flex:none;width:22px;text-align:right;color:var(--mut);font-variant-numeric:tabular-nums;font-size:14px}
+.grid .card:not(.uptile):hover{transform:none}
+.grid .card:not(.uptile) .cart{flex:none;width:64px;height:64px;aspect-ratio:auto;margin:0;border-radius:10px}
+.grid .card:not(.uptile) .cart .pp{right:50%;bottom:50%;transform:translate(50%,50%);width:38px;height:38px;box-shadow:0 6px 14px rgba(0,0,0,.5)}
+.grid .card:not(.uptile):hover .cart .pp{transform:translate(50%,50%) scale(1.06)}
+.grid .card:not(.uptile) .cart .pp svg{width:14px;height:14px}
+.grid .card:not(.uptile) .cart{overflow:visible}.grid .card:not(.uptile) .cart>svg{border-radius:10px}.grid .card:not(.uptile) .cart::after{border-radius:10px}
+.grid .card:not(.uptile) .badge{left:50%;top:auto;bottom:-8px;transform:translateX(-50%);font-size:9px;line-height:1.2;padding:2px 6px;white-space:nowrap;z-index:2;background:var(--c);color:#0d0e12;border:0;font-weight:700}
+.grid .card:not(.uptile) .cb{flex:1;padding:0;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"t a" "m a" "p p";column-gap:12px;row-gap:2px;align-items:center}
+.grid .card:not(.uptile) .cb>b{grid-area:t;font-size:16px}
+.grid .card:not(.uptile) .cb>.meta{grid-area:m}
+.grid .card:not(.uptile) .cb>.prog{grid-area:p;margin:6px 0 0}
+.grid .card:not(.uptile) .cb>.ra{grid-area:a;margin:0;padding:0;flex-wrap:nowrap}
+.grid .card:not(.uptile) .ra .btn{flex:none}
+.grid .card.cur{background:linear-gradient(90deg,color-mix(in srgb,var(--c) 14%,#15171d),#121318)}
+.grid .uptile{grid-column:1/-1;flex-direction:row;min-height:0;padding:14px 18px;gap:16px;justify-content:flex-start;text-align:left;border-radius:14px}
+.grid .uptile .plus{width:44px;height:44px;font-size:24px;flex:none}
+.grid .uptile b{font-size:17px}
+.grid .uptile span:last-child{font-size:13px}
+.grid .uptile::after{content:"Tap to choose files";margin-left:auto;font:600 13px Inter,sans-serif;color:var(--c);white-space:nowrap}
+.grid .grp{grid-column:1/-1}
+.card.uptile b+span{display:block}
+.uptile>b,.uptile>span:not(.plus){display:block}
+.uptile{display:grid!important;grid-template-columns:auto 1fr auto;grid-template-areas:"p t x" "p s x";align-items:center}
+.uptile .plus{grid-area:p}.uptile>b{grid-area:t}.uptile>span:last-child{grid-area:s}.uptile::after{grid-area:x}
+@media(max-width:860px){.bgrid{grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}.bgrid>div:first-child{order:2}.vizbox{order:1;aspect-ratio:auto;height:150px;width:100%;border-radius:18px}.banner{padding-top:18px}}
+@media(max-width:600px){
+ .grid .card:not(.uptile){gap:10px;padding:8px 10px}
+ .grid .card:not(.uptile)::before{width:16px;font-size:13px}
+ .grid .card:not(.uptile) .cart{width:54px;height:54px}
+ .grid .card:not(.uptile) .cart .pp{width:34px;height:34px}
+ .grid .card:not(.uptile) .cb>b{font-size:15px}
+ .grid .card:not(.uptile) .ra .btn{min-height:34px;padding:5px 11px;font-size:13px}
+ .grid .uptile::after{content:none}.uptile{grid-template-columns:auto 1fr;grid-template-areas:"p t" "p s"}
+ .banner h1{font-size:48px}}
+@media(max-width:860px){.top{background:#0b0c10;backdrop-filter:none}}
 </style>
 </head>
 <body>
