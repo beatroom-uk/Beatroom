@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>BeatRoom — Beats to sing on</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* VOICE: a polished music app for artists — direct, tactile, phone-first
    IDEA: a record crate: each collection is a wall of sleeves you flip through, with an empty sleeve for your own beat
@@ -268,6 +268,84 @@ footer{text-align:center;border-top:1px solid rgba(255,255,255,.06);margin-top:2
  .grid .uptile::after{content:none}.uptile{grid-template-columns:auto 1fr;grid-template-areas:"p t" "p s"}
  .banner h1{font-size:48px}}
 @media(max-width:860px){.top{background:#0b0c10;backdrop-filter:none}}
+
+/* ===== redesign v3: streetwear (visual only) ===== */
+:root{--bg:#070707;--p1:#0f0f0f;--p2:#161616;--p3:#1f1f1f;--line:#262626;--ink:#f5f5f2;--mut:#8f8f8a;--acc:#ff3b2f;--disp:Anton,"Archivo",Impact,sans-serif}
+body{background:var(--bg) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E");font-family:Inter,system-ui,sans-serif}
+h1,h2,h3{font-family:var(--disp);font-weight:400;text-transform:uppercase;letter-spacing:.005em}
+.top{background:#070707!important;backdrop-filter:none;box-shadow:none;border-bottom:1px solid #1d1d1d}
+.brand{font-family:var(--disp);font-weight:400;text-transform:uppercase;font-size:26px;letter-spacing:.02em}
+.brand svg rect{fill:var(--acc)}.brand svg{filter:none}
+.tabs a{text-transform:uppercase;font-size:13px;letter-spacing:.08em;font-weight:700;border-radius:0;color:#9a9a95;position:relative;background:none!important;box-shadow:none!important}
+.tabs a.on{color:#fff}
+.tabs a.on::after{content:"";position:absolute;left:14px;right:14px;bottom:2px;height:3px;background:var(--c,var(--acc))}
+.tabs a em{color:#666}
+.ticker{overflow:hidden;background:var(--acc);color:#0a0a0a;border-bottom:1px solid #000;white-space:nowrap}
+.tk{display:inline-flex;animation:tk 38s linear infinite}
+.tk span{font:400 15px/1 var(--disp);letter-spacing:.06em;padding:9px 0}
+@keyframes tk{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.tk{animation:none}}
+.banner{background:linear-gradient(transparent 0 0),repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 80px),radial-gradient(700px 360px at 10% 0%,color-mix(in srgb,var(--c) 22%,transparent),transparent 70%),#070707!important;border-bottom:1px solid #1d1d1d}
+.eyebrow{font:700 12px Inter,sans-serif!important;letter-spacing:.22em;text-transform:uppercase;color:var(--c)!important}
+.eyebrow::before{content:"";display:inline-block;width:22px;height:2px;background:var(--c);vertical-align:middle;margin-right:10px}
+.banner h1{font-size:clamp(64px,11vw,150px)!important;line-height:.88;margin:10px 0 14px;background:none!important;color:#fff!important;-webkit-text-fill-color:#fff;text-shadow:6px 6px 0 color-mix(in srgb,var(--c) 55%,transparent)}
+.banner p{color:#cfcfca;max-width:46ch;font-size:16px}
+.bstats span{border-radius:0;background:transparent;border:1px solid #2c2c2c;text-transform:uppercase;font-size:12px;letter-spacing:.06em;padding:6px 10px}
+.bstats b{color:#fff}
+.vizbox{border-radius:0!important;border:1px solid #2a2a2a;background:radial-gradient(circle at 30% 25%,color-mix(in srgb,var(--c) 40%,#111),#090909 75%)!important;box-shadow:12px 12px 0 color-mix(in srgb,var(--c) 30%,#000)}
+.vizbox .np{border-radius:0;background:#000;font:700 11px Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.btn{border-radius:0!important;text-transform:uppercase;letter-spacing:.08em;font-size:13px;font-weight:700;border-color:#2c2c2c;background:#0d0d0d}
+.btn:hover{background:#1a1a1a;border-color:#444}
+.btn.pri{background:#fff;color:#000;border-color:#fff;box-shadow:5px 5px 0 var(--acc)}
+.btn.pri:hover{background:#fff;box-shadow:7px 7px 0 var(--acc);transform:translate(-2px,-2px)}
+.btn.rec{background:var(--acc);border-color:var(--acc)}
+.btn.sm{min-height:34px}
+.toolbar input,.toolbar select,.search,textarea{border-radius:0!important;background:#0c0c0c!important;border-color:#262626!important}
+.toolbar input:focus,.toolbar select:focus{box-shadow:none;border-color:#fff!important}
+.cnt{text-transform:uppercase;letter-spacing:.1em;font-size:12px}
+.grid .card,.card{border-radius:0!important;background:#0c0c0c!important;border:1px solid #1e1e1e;box-shadow:none!important}
+.grid .card:not(.uptile):hover{border-color:#3a3a3a;background:#111!important}
+.grid .card.cur{background:#121212!important;border-color:var(--c);box-shadow:inset 4px 0 0 var(--c)!important}
+.grid .card:not(.uptile)::before{font:400 22px var(--disp);color:#3a3a3a;width:30px}
+.grid .card.cur::before{color:var(--c)}
+.grid .card:not(.uptile) .cart,.grid .card:not(.uptile) .cart>svg,.grid .card:not(.uptile) .cart::after{border-radius:0!important}
+.grid .card:not(.uptile) .cart .pp{border-radius:0;background:#fff;color:#000}
+.grid .card.cur .cart .pp{background:var(--c)}
+.cb b{font-weight:700;letter-spacing:0}
+.meta{text-transform:uppercase;font-size:11.5px!important;letter-spacing:.06em}
+.prog{border-radius:0;height:2px}
+.grid .card:not(.uptile) .badge{border-radius:0;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase}
+.uptile{border-radius:0!important;border:2px dashed #333!important;background:repeating-linear-gradient(-45deg,#0b0b0b 0 10px,#0e0e0e 10px 20px)!important}
+.uptile:hover{border-color:var(--c)!important}
+.uptile .plus{border-radius:0;background:var(--c);box-shadow:4px 4px 0 #fff!important}
+.uptile b{font:400 22px var(--disp)!important;text-transform:uppercase;letter-spacing:.02em}
+.grid .uptile::after{text-transform:uppercase;letter-spacing:.1em;font-size:11px}
+.grp{font:400 22px var(--disp)!important;text-transform:uppercase;color:#fff!important;letter-spacing:.02em;border-top:1px solid #1d1d1d}
+.shead h1{font-size:clamp(56px,10vw,120px)!important;line-height:.9;text-shadow:6px 6px 0 rgba(255,59,47,.45)}
+.panel{border-radius:0!important;background:#0c0c0c!important;border:1px solid #1e1e1e!important;box-shadow:none!important}
+.panel h3,.sbody h3{font-size:26px!important}
+.sn{border-radius:0;background:#fff;color:#000;box-shadow:4px 4px 0 var(--acc);font-family:var(--disp);font-weight:400}
+.selbox{border-radius:0;background:#141414}
+.selbox b{font:400 28px var(--disp)!important;text-transform:uppercase}
+.micbtn{background:var(--acc)!important;box-shadow:0 0 0 10px rgba(255,59,47,.12),8px 8px 0 #fff!important}
+.micbtn.on{background:#fff!important;color:var(--acc)}
+.meter,.meter i{border-radius:0}
+.take,.note,.stat,.pick,.chip{border-radius:0!important}
+.chip.on{background:#fff;color:#000}
+.pick.sel{box-shadow:inset 4px 0 0 var(--c)}
+summary{text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+.faq h2{font-size:48px}
+.player{background:#070707!important;border-top:2px solid #fff;box-shadow:none}
+.pl .pp{border-radius:0;background:#fff!important;color:#000;box-shadow:4px 4px 0 var(--c,var(--acc))}
+.pl .t b{font:400 20px var(--disp);text-transform:uppercase;letter-spacing:.02em}
+.pl .t span{text-transform:uppercase;font-size:11px;letter-spacing:.08em}
+.seek .track div{border-radius:0;height:3px}
+.toast{border-radius:0!important;background:#fff;box-shadow:6px 6px 0 var(--acc)}
+.sheetcard{border-radius:0!important}
+@media(max-width:860px){.top .tabs{background:#070707}.tabs a{font-size:11px;letter-spacing:.05em}.tabs a.on::after{left:10px;right:10px}.vizbox{box-shadow:8px 8px 0 color-mix(in srgb,var(--c) 30%,#000)}}
+@media(max-width:600px){.banner h1{font-size:72px!important;text-shadow:4px 4px 0 color-mix(in srgb,var(--c) 55%,transparent)}.brand{font-size:22px}.grid .card:not(.uptile)::before{font-size:18px;width:22px}.uptile b{font-size:19px!important}.shead h1{font-size:60px!important}.btn.pri{box-shadow:4px 4px 0 var(--acc)}}
+@media(max-width:600px){.bacts{flex-direction:column;align-items:stretch;gap:12px}.bacts .btn{width:100%;flex:none}.btn.pri{margin-right:5px}}
+.shead .eyebrow{color:var(--acc)!important}.shead .eyebrow::before{background:var(--acc)}
 </style>
 </head>
 <body>
@@ -281,6 +359,7 @@ footer{text-align:center;border-top:1px solid rgba(255,255,255,.06);margin-top:2
  </nav>
 </div></header>
 
+<div class="ticker" aria-hidden="true"><div class="tk"><span>BEATROOM ✦ UK DRILL ✦ JAZZ ✦ ROCK ✦ SING ON ANY BEAT ✦ UPLOAD YOUR OWN ✦ BEATROOM ✦ UK DRILL ✦ JAZZ ✦ ROCK ✦ SING ON ANY BEAT ✦ UPLOAD YOUR OWN ✦ BEATROOM ✦ UK DRILL ✦ JAZZ ✦ ROCK ✦ SING ON ANY BEAT ✦ UPLOAD YOUR OWN ✦ </span><span>BEATROOM ✦ UK DRILL ✦ JAZZ ✦ ROCK ✦ SING ON ANY BEAT ✦ UPLOAD YOUR OWN ✦ BEATROOM ✦ UK DRILL ✦ JAZZ ✦ ROCK ✦ SING ON ANY BEAT ✦ UPLOAD YOUR OWN ✦ BEATROOM ✦ UK DRILL ✦ JAZZ ✦ ROCK ✦ SING ON ANY BEAT ✦ UPLOAD YOUR OWN ✦ </span></div></div>
 <main>
 <section class="view" id="v-beats">
  <div class="banner" id="banner"><div class="wrap bgrid">
