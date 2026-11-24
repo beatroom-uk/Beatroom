@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#070707">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -283,7 +284,7 @@ body{background:var(--bg) url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.
 h1,h2,h3{font-family:var(--disp);font-weight:400;text-transform:uppercase;letter-spacing:.005em}
 .top{background:#070707!important;backdrop-filter:none;box-shadow:none;border-bottom:1px solid #1d1d1d}
 .brand{font-family:var(--disp);font-weight:400;text-transform:uppercase;font-size:26px;letter-spacing:.02em}
-.brand svg rect{fill:var(--acc)}.brand svg{filter:none}
+.brand svg rect{fill:#0a0a0a}.brand svg{box-shadow:0 0 0 1px #2a2a2a;border-radius:7px}.brand svg{filter:none}
 .tabs a{text-transform:uppercase;font-size:13px;letter-spacing:.08em;font-weight:700;border-radius:0;color:#9a9a95;position:relative;background:none!important;box-shadow:none!important}
 .tabs a.on{color:#fff}
 .tabs a.on::after{content:"";position:absolute;left:14px;right:14px;bottom:2px;height:3px;background:var(--c,var(--acc))}
@@ -432,7 +433,7 @@ html.ext .player,.player{bottom:0!important}
 </head>
 <body>
 <header class="top"><div class="wrap topin">
- <a class="brand" href="#drill"><svg viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="8" fill="#ff5a3c"/><path d="M7 18v-6M11 21V8M15 17v-4M19 20V9M23 16v-3" stroke="#1a0703" stroke-width="2.4" stroke-linecap="round"/></svg>BeatRoom</a>
+ <a class="brand" href="#drill"><svg viewBox="0 0 100 100" aria-hidden="true"><rect class="lg-bg" width="100" height="100" rx="22" fill="#0a0a0a"/><g fill-rule="evenodd"><path transform="translate(4 4)" fill="#ff3b2f" d="M10 24H31A12 12 0 0 1 31 48H33A14 14 0 0 1 33 76H10ZM21 33V39H30A3 3 0 0 0 30 33ZM21 57V67H32A5 5 0 0 0 32 57ZM55 24H75A12 12 0 0 1 80 46.5L89 76H77.5L70 50H66V76H55ZM66 33V40.5H74.5A3.75 3.75 0 0 0 74.5 33Z"/><path fill="#fff" d="M10 24H31A12 12 0 0 1 31 48H33A14 14 0 0 1 33 76H10ZM21 33V39H30A3 3 0 0 0 30 33ZM21 57V67H32A5 5 0 0 0 32 57ZM55 24H75A12 12 0 0 1 80 46.5L89 76H77.5L70 50H66V76H55ZM66 33V40.5H74.5A3.75 3.75 0 0 0 74.5 33Z"/></g></svg>BeatRoom</a>
  <button class="btn sm instbtn" id="installBtn" hidden>⬇ Install app</button>
  <nav class="tabs" id="tabs">
   <a href="#drill" data-v="drill" style="--c:var(--drill)"><i></i>UK Drill<em id="n-drill">19</em></a>
