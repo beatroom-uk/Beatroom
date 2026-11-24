@@ -164,13 +164,13 @@ footer{color:var(--mut);font-size:13px;padding:10px 0 24px}
 
 @media(max-width:860px){:root{--tb:64px}
  .top{backdrop-filter:none;background:#0d0e12}.vizbox{aspect-ratio:16/6!important}
- .top .tabs{position:fixed;left:0;right:0;bottom:0;height:64px;z-index:13;background:#111217;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding:0 4px}
+ .top .tabs{position:fixed;left:0;right:0;bottom:0;height:64px;z-index:13;background:#111217;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;padding:0 4px}
  .tabs a{flex-direction:column;justify-content:center;gap:3px;font-size:12px;padding:6px 2px;border-radius:10px;margin:6px 2px}
  .tabs a i{width:12px;height:12px}.tabs a em{display:none}
  .bgrid,.sing,.faq{grid-template-columns:minmax(0,1fr)}.vizbox{aspect-ratio:16/7}.picker{max-height:46vh}}
 
 /* hosted elsewhere (no Claude): tabs at top so a host's bottom banner can't cover them */
-@media(max-width:860px){html.ext{--tb:0px}html.ext .topin{flex-wrap:wrap;gap:6px;padding-top:8px;padding-bottom:8px}html.ext .top .tabs{position:static;height:auto;width:100%;background:none;border:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}html.ext .tabs a{margin:0 2px;padding:8px 2px;flex-direction:row;gap:6px;font-size:13px}html.ext .tabs a svg{width:15px;height:15px}html.ext .tabs a i{width:9px;height:9px}html.ext body{padding-bottom:190px}html.ext .player{bottom:70px}}
+@media(max-width:860px){html.ext{--tb:0px}html.ext .topin{flex-wrap:wrap;gap:6px;padding-top:8px;padding-bottom:8px}html.ext .top .tabs{position:static;height:auto;width:100%;background:none;border:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}html.ext .tabs a{margin:0 2px;padding:8px 2px;flex-direction:row;gap:6px;font-size:13px}html.ext .tabs a svg{width:15px;height:15px}html.ext .tabs a i{width:9px;height:9px}html.ext body{padding-bottom:190px}html.ext .player{bottom:70px}}
 @media(max-width:600px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cb{padding:10px 11px 12px}.cb b{font-size:15px}.card .cart .pp{width:46px;height:46px;right:8px;bottom:8px}.ra .btn{flex:1}
  .uptile{min-height:200px;padding:14px}.bacts .btn{flex:1 1 140px}
  .pl{grid-template-columns:auto minmax(0,1fr);gap:10px;padding-block:8px}.pl .seek{grid-column:1/-1;order:3}.vol{display:none}body{padding-bottom:calc(118px + var(--tb))}.toast{bottom:calc(128px + var(--tb))}.stats b{font-size:18px}}
@@ -394,6 +394,40 @@ html.ext .player,.player{bottom:0!important}
 .insthelp button{margin-top:10px;background:#000;color:#fff;border:0;padding:8px 14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:12px}
 @media (display-mode: standalone){.instbtn{display:none!important}}
 @media(max-width:860px){.instbtn{position:absolute;right:max(4vw,16px);top:14px}html.ext .topin{position:relative}}
+/* ===== beat maker ===== */
+.maker .mk-lead{color:#cfcfca;max-width:60ch;margin-top:12px;font-size:16px}
+.mk-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;margin:8px 0 30px}
+.mk-side{display:flex;flex-direction:column;gap:16px}
+.pads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.pad{position:relative;aspect-ratio:1;border:1px solid #2a2a2a;background:#111;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;padding:12px;text-align:left;cursor:pointer;box-shadow:inset 0 -4px 0 var(--pc);transition:transform .06s,background .06s;-webkit-tap-highlight-color:transparent}
+.pad b{font:400 clamp(18px,3vw,26px) var(--disp);text-transform:uppercase;letter-spacing:.02em;line-height:1}
+.pad small{position:absolute;top:10px;left:12px;font:700 11px Inter,sans-serif;color:#666;letter-spacing:.1em}
+.pad i{position:absolute;top:12px;right:12px;width:10px;height:10px;background:var(--pc)}
+.pad.hit{background:var(--pc);color:#000;transform:scale(.96)}
+.pad.hit small{color:#000}
+.mk-loop{margin:16px 0 10px}
+.mk-steps{display:grid;gap:3px}
+.mk-steps span{height:12px;background:#1d1d1d}
+.mk-steps span.beat{background:#2c2c2c}
+.mk-steps span.has{background:#555}
+.mk-steps span.now{background:var(--acc)!important}
+.mk-trans{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 6px}
+.mk-trans .btn{flex:1 1 90px}
+#mkRec.on{background:#fff;color:var(--acc);border-color:#fff}
+.mk-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:10px 0}
+.mk-row .chips{margin:0}
+.mk-check{justify-content:flex-start;color:#cfcfca;font-size:14px}
+.mk-check input{width:20px;height:20px;accent-color:var(--acc)}
+.mk-list{display:flex;flex-direction:column;gap:8px}
+.mk-item{display:flex;align-items:center;gap:10px;border:1px solid #1e1e1e;background:#111;padding:10px 12px}
+.mk-item .info{flex:1;display:flex;flex-direction:column}
+.mk-item b{font-weight:700}
+.mk-item span{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.mk-item .btn{min-height:34px;padding:6px 10px;font-size:11px}
+@media(max-width:860px){.mk-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.pads{gap:8px}.pad{padding:10px}.mk-trans .btn{flex:1 1 30%}}
+@media(min-width:861px){.pad{aspect-ratio:5/4}}
+@media(max-width:600px){.tabs a{white-space:nowrap;font-size:10.5px!important;letter-spacing:.03em!important;gap:4px!important;padding:8px 1px!important;justify-content:center}.tabs a svg{width:13px;height:13px;flex:none}.tabs a i{width:7px!important;height:7px!important;flex:none}.tabs a.on::after{left:4px!important;right:4px!important}}
 </style>
 </head>
 <body>
@@ -404,6 +438,7 @@ html.ext .player,.player{bottom:0!important}
   <a href="#drill" data-v="drill" style="--c:var(--drill)"><i></i>UK Drill<em id="n-drill">19</em></a>
   <a href="#jazz" data-v="jazz" style="--c:var(--jazz)"><i></i>Jazz<em id="n-jazz">19</em></a>
   <a href="#rock" data-v="rock" style="--c:var(--rock)"><i></i>Rock<em id="n-rock">19</em></a>
+  <a href="#maker" data-v="maker"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="2.5" width="6" height="6" rx="1" fill="currentColor"/><rect x="11.5" y="2.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2.5" y="11.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="11.5" y="11.5" width="6" height="6" rx="1" fill="currentColor"/></svg>Maker</a>
   <a href="#studio" data-v="studio"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="2" width="6" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 9a6 6 0 0 0 12 0M10 15v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Studio</a>
  </nav>
 </div></header>
@@ -429,6 +464,42 @@ html.ext .player,.player{bottom:0!important}
   <div class="grid" id="list"></div>
  </div>
 </section>
+
+<section class="view" id="v-maker"><div class="wrap maker">
+ <div class="shead"><span class="eyebrow">Beat maker</span><h1>Make a beat</h1><p class="mk-lead">Tap the pads to play sounds. Press <b>Record</b>, wait for the 4 clicks, then tap in time — your pattern loops so you can keep adding sounds. Save it and sing over it in the Studio.</p></div>
+ <div class="mk-grid">
+  <div class="panel mk-padpanel">
+   <div class="pads" id="pads"></div>
+   <div class="mk-loop"><div class="mk-steps" id="mkSteps"></div></div>
+   <div class="mk-trans">
+    <button class="btn rec" id="mkRec">● Record</button>
+    <button class="btn" id="mkPlay">▶ Play</button>
+    <button class="btn" id="mkStop">■ Stop</button>
+    <button class="btn" id="mkUndo">↶ Undo</button>
+    <button class="btn" id="mkClear">Clear</button>
+   </div>
+   <div class="status" id="mkStat">Tap a pad to hear it.</div>
+  </div>
+  <div class="mk-side">
+   <div class="panel">
+    <h3>Settings</h3>
+    <label class="field">Tempo: <b id="mkBpmV">140 BPM</b><input type="range" id="mkBpm" min="60" max="180" step="1" value="140"></label>
+    <div class="mk-row"><span class="count">Loop length</span><div class="chips" id="mkLen"><button class="chip" data-len="1">1 bar</button><button class="chip on" data-len="2">2 bars</button><button class="chip" data-len="4">4 bars</button></div></div>
+    <label class="mk-row mk-check"><input type="checkbox" id="mkMetro" checked> Metronome clicks while recording</label>
+   </div>
+   <div class="panel">
+    <h3>Save your beat</h3>
+    <label class="field">Beat name<input id="mkName" class="search" placeholder="My beat" maxlength="60"></label>
+    <div class="acts"><button class="btn pri" id="mkSave">Save beat</button></div>
+    <div class="status" id="mkSaveStat"></div>
+   </div>
+   <div class="panel">
+    <h3>My beats</h3>
+    <div id="mkList" class="mk-list"></div>
+   </div>
+  </div>
+ </div>
+</div></section>
 
 <section class="view" id="v-studio"><div class="wrap studio">
  <div class="shead"><span class="eyebrow">Vocal studio</span><h1>Sing on a beat</h1></div>
@@ -778,8 +849,8 @@ $('#mpp').onclick=()=>{if(P.b)toggle(P.b);else $('#fplay').click()};
 $('#vol').oninput=e=>{if(P.master)P.master.gain.value=+e.target.value};
 const tr=$('#track');tr.addEventListener('pointerdown',e=>{const r=tr.getBoundingClientRect();seek((e.clientX-r.left)/r.width)});
 document.addEventListener('keydown',e=>{if(e.code==='Space'&&!/INPUT|TEXTAREA|BUTTON|SELECT|SUMMARY/.test(e.target.tagName)&&P.b){e.preventDefault();toggle(P.b)}});
-function route(){let v=(location.hash||'').slice(1);if(!ORDER.includes(v)&&v!=='studio')v=cat;
- view=v==='studio'?'studio':'beats';if(ORDER.includes(v)&&v!==cat){cat=v;q='';$('#q').value='';}
+function route(){let v=(location.hash||'').slice(1);if(!ORDER.includes(v)&&v!=='studio'&&v!=='maker')v=cat;
+ view=v==='studio'?'studio':v==='maker'?'maker':'beats';if(ORDER.includes(v)&&v!==cat){cat=v;q='';$('#q').value='';}
  if(view==='beats'){renderChans();renderList()}
  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+view));document.querySelectorAll('#tabs a').forEach(a=>a.classList.toggle('on',a.dataset.v===v));window.scrollTo(0,0)}
 addEventListener('hashchange',route);
@@ -882,6 +953,74 @@ async function uploadFiles(fs,g){let ok=0,notes='',errs=[];
  toast((ok?`${ok} beat${ok>1?'s':''} added to ${GEN[g].name}.${SB.on?' Everyone with the link can play it now.':!ST.db?' Tap Save on it to keep it.':''}`:'')+(errs.length?' '+errs.join(' '):'')+notes,!!errs.length||!!notes);
  if(errs.length||notes)setTimeout(()=>toast(''),12000)}
 document.addEventListener('change',e=>{const t=e.target;if(t&&t.classList&&t.classList.contains('upin')&&t.dataset.g){const fs=[...t.files],g=t.dataset.g;t.value='';if(fs.length&&canUp())uploadFiles(fs,g)}});
+/* ---------- beat maker: 9 pads, loop recorder, saved beats usable in the Studio ---------- */
+const PADS=[
+ {n:'Kick',c:'#ff3b2f',f:(S,t)=>S.kick(t,1)},
+ {n:'Snare',c:'#f5f5f2',f:(S,t)=>S.snare(t,1)},
+ {n:'Clap',c:'#ffb23f',f:(S,t)=>S.clap(t,.9)},
+ {n:'Hi-hat',c:'#8aa9d6',f:(S,t)=>S.hat(t,.85)},
+ {n:'Open hat',c:'#5fd3c4',f:(S,t)=>S.hat(t,.8,true)},
+ {n:'Rim',c:'#d9a441',f:(S,t)=>S.rim(t,.9)},
+ {n:'Tom',c:'#b98cff',f:(S,t)=>S.tom(t,115,1)},
+ {n:'808',c:'#ff6f91',f:(S,t)=>S.b808(t,36,.9,1)},
+ {n:'Crash',c:'#9be36b',f:(S,t)=>S.crash(t,.8)}];
+GEN.pad={name:'My beats',col:'var(--acc)',titles:[],build(){},
+ play(S,b,bar,st,t,sd){const L=b.loop*16,idx=(bar*16+st)%L;(b.steps[idx]||[]).forEach(k=>{if(PADS[k])PADS[k].f(S,t)});
+  if(b.metro&&st%4===0)S.rim(t,st===0?.7:.3)}};
+HUE.pad=8;
+const MK={bpm:140,loop:2,steps:{},hist:[],rec:false,b:null,saved:[],PS:null};
+const mkSD=()=>15/MK.bpm,mkL=()=>MK.loop*16;
+function padSynth(){const c=ctx();if(!MK.PS||MK.PS.c!==c)MK.PS=new Synth(c,P.master);return MK.PS}
+function mkBeat(metro){return{id:'mk-live',gk:'pad',genre:'Beat maker',col:'var(--acc)',type:'synth',title:'Your pattern',bpm:MK.bpm,key:'',lvl:1,seed:5,loop:MK.loop,steps:MK.steps,metro,bars:MK.loop*64,dur:MK.loop*64*240/MK.bpm,desc:'Beat maker pattern'}}
+function renderPads(){$('#pads').innerHTML=PADS.map((p,i)=>`<button class="pad" style="--pc:${p.c}" data-pad="${i}" aria-label="${p.n}"><small>${i+1}</small><i></i><b>${p.n}</b></button>`).join('')}
+function renderSteps(){const L=mkL(),el=$('#mkSteps');el.style.gridTemplateColumns=`repeat(${L},minmax(0,1fr))`;
+ el.innerHTML=Array.from({length:L},(_,i)=>`<span class="${i%4===0?'beat ':''}${MK.steps[i]&&MK.steps[i].length?'has':''}"></span>`).join('')}
+function mkStat(t){$('#mkStat').textContent=t}
+function hitPad(i){const pad=document.querySelector(`.pad[data-pad="${i}"]`);if(pad){pad.classList.add('hit');setTimeout(()=>pad.classList.remove('hit'),110)}
+ const c=ctx(),S=padSynth();PADS[i].f(S,c.currentTime+.005);
+ if(MK.rec&&P.b===MK.b&&P.playing){const sd=mkSD(),rel=c.currentTime-P.t0;if(rel<-sd/2)return;
+  const idx=((Math.round(rel/sd))%mkL()+mkL())%mkL();const a=MK.steps[idx]||(MK.steps[idx]=[]);if(!a.includes(i)){a.push(i);MK.hist.push([idx,i]);renderSteps()}}}
+function mkStop(){if(P.b&&P.b.gk==='pad'&&P.b.id==='mk-live'&&P.playing)pause();MK.rec=false;$('#mkRec').classList.remove('on');$('#mkRec').textContent='● Record'}
+function mkRecord(){if(MK.rec){mkStop();mkStat('Recording stopped. Press Play to hear your loop, or Record to add more.');return}
+ P.queue=null;MK.b=mkBeat($('#mkMetro').checked);MK.rec=true;start(MK.b,0,{countIn:true});$('#mkRec').classList.add('on');$('#mkRec').textContent='■ Stop rec';
+ mkStat('Get ready… 4 clicks, then tap the pads in time. The loop repeats so you can keep adding.')}
+function mkPlay(){if(MK.rec)mkStop();if(!Object.keys(MK.steps).length){mkStat('Nothing recorded yet — press Record first.');return}
+ if(P.b&&P.b.id==='mk-live'&&P.playing){pause();return}P.queue=null;MK.b=mkBeat(false);start(MK.b,0);mkStat('Playing your loop.')}
+function mkFrame(){if(view==='maker'){const on=P.b&&P.b.id==='mk-live'&&P.playing,el=$('#mkSteps');let now=-1;
+  if(on&&P.ctx){const rel=P.ctx.currentTime-P.t0;if(rel>=0)now=Math.floor(rel/mkSD())%mkL()}
+  if(el.dataset.now!==String(now)){const o=el.children[+el.dataset.now];if(o)o.classList.remove('now');const n=el.children[now];if(n)n.classList.add('now');el.dataset.now=now}
+  $('#mkPlay').textContent=on&&!MK.rec?'❚❚ Pause':'▶ Play'}
+ requestAnimationFrame(mkFrame)}
+function mkSavedBeat(x){const loop=[1,2,4].includes(+x.loop)?+x.loop:2,bpm=Math.max(60,Math.min(180,+x.bpm||140)),reps=Math.max(1,Math.round(120/(loop*240/bpm))),bars=loop*reps;
+ return{id:'mk-'+x.id,mkid:x.id,gk:'pad',genre:'My beats',col:'var(--acc)',type:'synth',title:String(x.title||'My beat').slice(0,60),bpm,key:'',lvl:1,seed:(+x.id||7)%9973,loop,steps:x.steps||{},metro:false,bars,dur:bars*240/bpm,desc:'Made in Beat Maker',mk:true}}
+function mkPersist(){try{localStorage.setItem('br-mk',JSON.stringify(MK.saved))}catch(e){}}
+function mkLoad(){try{MK.saved=JSON.parse(localStorage.getItem('br-mk')||'[]')||[]}catch(e){MK.saved=[]}
+ MK.saved.forEach(x=>{const b=mkSavedBeat(x);if(!UP.find(u=>u.id===b.id))UP.push(b)});renderMk()}
+function renderMk(){const L=UP.filter(b=>b.mk);$('#mkList').innerHTML=L.length?L.map(b=>`<div class="mk-item" data-mk="${b.id}"><div class="info"><b>${esc(b.title)}</b><span>${b.bpm} BPM · ${b.loop} bar loop · ${fmt(b.dur)}</span></div><button class="btn" data-mka="play">${P.b===b&&P.playing?'❚❚':'▶'}</button><button class="btn pri" data-mka="sing">Sing</button><button class="btn" data-mka="del">Delete</button></div>`).join(''):'<div class="empty">Beats you save appear here — and in the Studio.</div>'}
+function mkSave(){const n=Object.values(MK.steps).reduce((a,v)=>a+v.length,0);if(!n){$('#mkSaveStat').textContent='Record a pattern first.';return}
+ const x={id:String(Date.now()),title:($('#mkName').value.trim()||'My beat '+(MK.saved.length+1)).slice(0,60),bpm:MK.bpm,loop:MK.loop,steps:JSON.parse(JSON.stringify(MK.steps))};
+ MK.saved.push(x);mkPersist();UP.push(mkSavedBeat(x));renderMk();renderPicker();$('#mkName').value='';
+ $('#mkSaveStat').textContent=`Saved “${x.title}”. Tap Sing to record your vocals over it.`}
+renderPads();renderSteps();mkLoad();requestAnimationFrame(mkFrame);
+$('#pads').addEventListener('pointerdown',e=>{const p=e.target.closest('.pad');if(!p)return;e.preventDefault();hitPad(+p.dataset.pad)});
+document.addEventListener('keydown',e=>{if(view!=='maker'||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;const k=+e.key;if(k>=1&&k<=9){e.preventDefault();hitPad(k-1)}});
+$('#mkRec').onclick=mkRecord;$('#mkPlay').onclick=mkPlay;$('#mkStop').onclick=()=>{mkStop();if(P.b&&P.b.mk&&P.playing)pause();mkStat('Stopped.')};
+$('#mkUndo').onclick=()=>{const h=MK.hist.pop();if(!h){mkStat('Nothing to undo.');return}const a=MK.steps[h[0]];if(a){a.splice(a.indexOf(h[1]),1);if(!a.length)delete MK.steps[h[0]]}renderSteps()};
+$('#mkClear').onclick=e=>{const b=e.currentTarget;if(b.dataset.sure!=='1'){b.dataset.sure='1';b.textContent='Tap again';setTimeout(()=>{b.dataset.sure='';b.textContent='Clear'},3000);return}
+ b.dataset.sure='';b.textContent='Clear';MK.steps={};MK.hist=[];if(MK.b)MK.b.steps=MK.steps;renderSteps();mkStat('Pattern cleared.')};
+$('#mkBpm').oninput=e=>{MK.bpm=+e.target.value;$('#mkBpmV').textContent=MK.bpm+' BPM'};
+$('#mkBpm').onchange=()=>{if(P.b&&P.b.id==='mk-live'&&P.playing){const r=MK.rec;mkStop();if(r)mkRecord();else mkPlay()}};
+$('#mkLen').addEventListener('click',e=>{const c=e.target.closest('[data-len]');if(!c)return;const nl=+c.dataset.len;if(nl===MK.loop)return;
+ if(P.b&&P.b.id==='mk-live'&&P.playing)mkStop();const old=mkL();MK.loop=nl;const L=mkL(),ns={};
+ Object.entries(MK.steps).forEach(([i,v])=>{if(+i<L)ns[i]=v});if(L>old)Object.entries(MK.steps).forEach(([i,v])=>{for(let o=+i+old;o<L;o+=old)ns[o]=[...v]});
+ MK.steps=ns;MK.hist=[];document.querySelectorAll('#mkLen .chip').forEach(x=>x.classList.toggle('on',x===c));renderSteps()});
+$('#mkSave').onclick=mkSave;
+$('#mkList').addEventListener('click',e=>{const a=e.target.closest('[data-mka]');if(!a)return;const b=byId(a.closest('[data-mk]').dataset.mk);if(!b)return;
+ if(a.dataset.mka==='play'){if(P.b===b&&P.playing)pause();else{if(MK.rec)mkStop();P.queue=null;start(b,0)}setTimeout(renderMk,50)}
+ else if(a.dataset.mka==='sing'){select(b);location.hash='studio'}
+ else{if(a.dataset.sure!=='1'){a.dataset.sure='1';a.textContent='Sure?';setTimeout(()=>{if(a.isConnected){a.dataset.sure='';a.textContent='Delete'}},3000);return}
+  if(P.b===b){silence();P.playing=false;P.b=null;ui()}MK.saved=MK.saved.filter(x=>x.id!==b.mkid);mkPersist();UP.splice(UP.indexOf(b),1);if(sel===b)sel=null;renderMk();renderPicker()}});
+
 route();renderPicker();renderTakes();ui();loadLocal();loadShared();setInterval(()=>{if(!document.hidden)loadShared()},60000);requestAnimationFrame(frame);
 connectStore();
 if(window.claude&&window.claude.use)window.claude.use('downloads').then(d=>{downloads=d;renderTakes()}).catch(()=>{});
