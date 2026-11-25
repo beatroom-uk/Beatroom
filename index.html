@@ -22,7 +22,7 @@
    COLOUR and TYPE: graphite night ground, chalk ink, coral brand; drill steel blue, jazz brass, rock red; Archivo + Inter
    LAYOUT: top tabs on desktop, bottom tab bar on phones; banner, toolbar, sleeve grid; studio tab with booth + FAQ; transport above tab bar */
 :root{color-scheme:dark;--bg:#0d0e12;--p1:#15171d;--p2:#1d2028;--p3:#262a35;--line:#2a2e38;--ink:#eef0f4;--mut:#9aa0ad;--acc:#ff5a3c;
---drill:#8aa9d6;--jazz:#d9a441;--rock:#ef4a3c;--rnb:#ff7eb6;--tb:0px}
+--drill:#8aa9d6;--jazz:#d9a441;--rock:#ef4a3c;--rnb:#ff7eb6;--afro:#3ddc84;--tb:0px}
 :root[data-theme=light],:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,sans-serif;overflow-x:clip;padding-bottom:calc(80px + var(--tb))}
@@ -165,13 +165,13 @@ footer{color:var(--mut);font-size:13px;padding:10px 0 24px}
 
 @media(max-width:860px){:root{--tb:64px}
  .top{backdrop-filter:none;background:#0d0e12}.vizbox{aspect-ratio:16/6!important}
- .top .tabs{position:fixed;left:0;right:0;bottom:0;height:64px;z-index:13;background:#111217;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;padding:0 4px}
+ .top .tabs{position:fixed;left:0;right:0;bottom:0;height:64px;z-index:13;background:#111217;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0;padding:0 4px}
  .tabs a{flex-direction:column;justify-content:center;gap:3px;font-size:12px;padding:6px 2px;border-radius:10px;margin:6px 2px}
  .tabs a i{width:12px;height:12px}.tabs a em{display:none}
  .bgrid,.sing,.faq{grid-template-columns:minmax(0,1fr)}.vizbox{aspect-ratio:16/7}.picker{max-height:46vh}}
 
 /* hosted elsewhere (no Claude): tabs at top so a host's bottom banner can't cover them */
-@media(max-width:860px){html.ext{--tb:0px}html.ext .topin{flex-wrap:wrap;gap:6px;padding-top:8px;padding-bottom:8px}html.ext .top .tabs{position:static;height:auto;width:100%;background:none;border:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}html.ext .tabs a{margin:0 2px;padding:8px 2px;flex-direction:row;gap:6px;font-size:13px}html.ext .tabs a svg{width:15px;height:15px}html.ext .tabs a i{width:9px;height:9px}html.ext body{padding-bottom:190px}html.ext .player{bottom:70px}}
+@media(max-width:860px){html.ext{--tb:0px}html.ext .topin{flex-wrap:wrap;gap:6px;padding-top:8px;padding-bottom:8px}html.ext .top .tabs{position:static;height:auto;width:100%;background:none;border:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}html.ext .tabs a{margin:0 2px;padding:8px 2px;flex-direction:row;gap:6px;font-size:13px}html.ext .tabs a svg{width:15px;height:15px}html.ext .tabs a i{width:9px;height:9px}html.ext body{padding-bottom:190px}html.ext .player{bottom:70px}}
 @media(max-width:600px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cb{padding:10px 11px 12px}.cb b{font-size:15px}.card .cart .pp{width:46px;height:46px;right:8px;bottom:8px}.ra .btn{flex:1}
  .uptile{min-height:200px;padding:14px}.bacts .btn{flex:1 1 140px}
  .pl{grid-template-columns:auto minmax(0,1fr);gap:10px;padding-block:8px}.pl .seek{grid-column:1/-1;order:3}.vol{display:none}body{padding-bottom:calc(118px + var(--tb))}.toast{bottom:calc(128px + var(--tb))}.stats b{font-size:18px}}
@@ -439,6 +439,7 @@ html.ext .player,.player{bottom:0!important}
 .reninp{flex:1;min-width:0;background:#000;border:1px solid #fff;color:#fff;font:600 16px Inter,sans-serif;padding:6px 8px;min-height:36px}
 @media(max-width:859px){.grid .card:not(.uptile) .cb{grid-template-areas:"t t" "m a" "p p"!important;row-gap:4px!important}.grid .card:not(.uptile) .cb>b{grid-area:t!important}.grid .card:not(.uptile) .cb>.meta{grid-area:m!important;align-self:center}.grid .card:not(.uptile) .cb>.ra{grid-area:a!important}}
 @media(max-width:600px){.tabs a{font-size:9.5px!important;letter-spacing:.02em!important;gap:3px!important}.tabs a svg{width:12px!important;height:12px!important}}
+@media(max-width:860px){html.ext .top .tabs{display:flex!important;overflow-x:auto;scrollbar-width:none;gap:2px;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}html.ext .top .tabs::-webkit-scrollbar{display:none}html.ext .tabs a{flex:none!important;padding:8px 10px!important;font-size:11px!important;scroll-snap-align:start}}
 </style>
 </head>
 <body>
@@ -450,6 +451,7 @@ html.ext .player,.player{bottom:0!important}
   <a href="#jazz" data-v="jazz" style="--c:var(--jazz)"><i></i>Jazz<em id="n-jazz">0</em></a>
   <a href="#rock" data-v="rock" style="--c:var(--rock)"><i></i>Rock<em id="n-rock">0</em></a>
   <a href="#rnb" data-v="rnb" style="--c:var(--rnb)"><i></i>R&amp;B<em id="n-rnb">0</em></a>
+  <a href="#afro" data-v="afro" style="--c:var(--afro)"><i></i>Afro<em id="n-afro">0</em></a>
   <a href="#maker" data-v="maker"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="2.5" width="6" height="6" rx="1" fill="currentColor"/><rect x="11.5" y="2.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2.5" y="11.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="11.5" y="11.5" width="6" height="6" rx="1" fill="currentColor"/></svg>Maker</a>
   <a href="#studio" data-v="studio"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="2" width="6" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 9a6 6 0 0 0 12 0M10 15v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Studio</a>
  </nav>
@@ -684,6 +686,7 @@ const GEN={
    if(st===0&&((bar-4)%4===0||bar===b.bars-1))S.crash(t,.8);
    else if(sec==='hook'||sec==='outro'){if(st%4===2)S.hat(t,.5,true);else if(st%2===0)S.hat(t,.45)}
    else if(st%2===0)S.hat(t,st%4?.45:.7)}},
+ afro:{name:'Afrobeats',col:'var(--afro)',titles:[],build(){},play(){}},
  rnb:{name:'R&B / Afroswing',col:'var(--rnb)',titles:[],build(){},play(){}},
  drill:{name:'UK Drill',col:'var(--drill)',
   titles:['Midnight Estate','Grey Concrete','Peckham Fog','Cold Tower','Night Bus','Blackout','South Side Rain','Shadow Ends','Iron Gate','Dark Waters','Frostbite','No Signal','Ghost Tower','Stone Cold','Black Ice','Underpass','Smoked Glass','Hollow Ends','Grim Tide'],
@@ -747,15 +750,15 @@ function seek(frac){const b=P.b;if(!b)return;const at=Math.max(0,Math.min(.999,f
 /* ---------- UI ---------- */
 function $(s){return document.querySelector(s)}
 const IPLAY='<svg viewBox="0 0 20 20"><path d="M5 3l12 7-12 7z" fill="currentColor"/></svg>',IPAUSE='<svg viewBox="0 0 20 20"><path d="M4 3h4v14H4zM12 3h4v14h-4z" fill="currentColor"/></svg>';
-const ORDER=['drill','jazz','rock','rnb'],ACCEPT='audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac,.webm';
+const ORDER=['drill','jazz','rock','rnb','afro'],ACCEPT='audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac,.webm';
 let cat='drill',view='beats',lastList=[],q='',scat='all',sq='',sel=null,sortBy='';
 const metaHTML=b=>`<span class="g">${esc(b.genre)}</span><span>${b.bpm?esc(b.bpm)+' BPM':'BPM –'}</span><span>${esc(b.key||'Key –')}</span><span>${fmt(b.dur)}</span>`;
-const HUE={drill:215,jazz:40,rock:6,rnb:330};
+const HUE={drill:215,jazz:40,rock:6,rnb:330,afro:145};
 function art(b){const r=mul(b.seed+5);let s=`<svg viewBox="0 0 40 40" preserveAspectRatio="none" aria-hidden="true"><defs><radialGradient id="g${b.id}" cx=".3" cy=".25" r=".9"><stop offset="0" style="stop-color:hsl(${HUE[b.gk]} 30% 30%)"/><stop offset="1" style="stop-color:hsl(${HUE[b.gk]} 26% 10%)"/></radialGradient></defs><rect width="40" height="40" fill="url(#g${b.id})"/>`;
  for(let i=0;i<7;i++)s+=`<rect x="${3+i*5}" y="${(r()*20+12).toFixed(1)}" width="3" height="40" rx="1.5" style="fill:${b.col}" opacity="${(.3+r()*.6).toFixed(2)}"/>`;return s+'</svg>'}
 const cardHTML=b=>`<article class="card row" style="--c:${b.col}" data-id="${b.id}"><div class="cart">${art(b)}${b.up?`<span class="badge">${b.shared?(b.mine?'Your beat · Shared':'Shared'):b.local?(b.saved?'Saved ✓':'Not saved yet'):'Your upload'}</span>`:''}<button class="pp" data-act="play" aria-label="Play ${esc(b.title)}">${IPLAY}</button></div><div class="cb"><b><span class="tt">${esc(b.title)}</span>${(b.shared&&b.mine)||(b.local&&b.saved)?`<button class="ren" data-act="ren" aria-label="Rename ${esc(b.title)}" title="Rename">✎</button>`:''}</b><span class="meta"><span>${b.bpm?esc(b.bpm)+' BPM':'BPM –'}</span><span>${esc(b.key||'Key –')}</span><span>${fmt(b.dur)}</span></span><div class="prog"><i></i></div><div class="ra"><button class="btn sm" data-act="sing">Sing</button>${b.up&&b.asset&&ST.as?'<button class="btn sm" data-act="del">Remove</button>':''}${b.local&&!b.saved?'<button class="btn sm pri" data-act="save">Save</button>':''}${(b.local&&b.saved)||(b.shared&&b.mine)?'<button class="btn sm" data-act="del">Remove</button>':''}</div></div></article>`;
 const upTile=g=>`<label class="card uptile" style="--c:${GEN[g].col}"><input type="file" class="upin" data-g="${g}" multiple accept="${ACCEPT}" aria-label="Upload beats to ${GEN[g].name}"><span class="plus">+</span><b>Upload beats</b><span>${SB.on?'Everyone with the link will see it':'Add your own '+GEN[g].name+' beats'} · MP3, WAV, M4A up to 20 MB</span></label>`;
-const BLURB={rnb:'Smooth melodies, guitar strums and bouncy afro rhythms for love songs and vibes. Upload your R&B and afroswing beats here.',drill:'Dark piano, sliding 808s and skippy hi-hats. Upload your UK drill beats here.',jazz:'Smooth chords, swing and late-night grooves. Upload your jazz beats here.',rock:'Guitars, live drums and big choruses. Upload your rock beats here.'};
+const BLURB={afro:'Log drums, shakers and bouncy West African grooves. Upload your afrobeats here.',rnb:'Smooth melodies, guitar strums and bouncy afro rhythms for love songs and vibes. Upload your R&B and afroswing beats here.',drill:'Dark piano, sliding 808s and skippy hi-hats. Upload your UK drill beats here.',jazz:'Smooth chords, swing and late-night grooves. Upload your jazz beats here.',rock:'Guitars, live drums and big choruses. Upload your rock beats here.'};
 const match=(b,s)=>!s||(b.title+' '+b.key+' '+b.bpm+' '+b.genre+' '+(b.desc||'')).toLowerCase().includes(s.toLowerCase());
 const canUp=()=>!ST.db||!!ST.as;
 const sortL=L=>{if(!sortBy)return L;const s=[...L];if(sortBy==='title')s.sort((a,b)=>a.title.localeCompare(b.title));else{const d=sortBy==='-bpm'?-1:1;s.sort((a,b)=>((+a.bpm||0)-(+b.bpm||0))*d)}return s};
@@ -871,7 +874,7 @@ document.addEventListener('keydown',e=>{if(e.code==='Space'&&!/INPUT|TEXTAREA|BU
 function route(){let v=(location.hash||'').slice(1);if(!ORDER.includes(v)&&v!=='studio'&&v!=='maker')v=cat;
  view=v==='studio'?'studio':v==='maker'?'maker':'beats';if(ORDER.includes(v)&&v!==cat){cat=v;q='';$('#q').value='';}
  if(view==='beats'){renderChans();renderList()}
- document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+view));document.querySelectorAll('#tabs a').forEach(a=>a.classList.toggle('on',a.dataset.v===v));window.scrollTo(0,0)}
+ document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+view));document.querySelectorAll('#tabs a').forEach(a=>{a.classList.toggle('on',a.dataset.v===v);if(a.dataset.v===v&&a.scrollIntoView)try{a.scrollIntoView({block:'nearest',inline:'center'})}catch(e){}});window.scrollTo(0,0)}
 addEventListener('hashchange',route);
 $('#bChoose').onclick=openPicker;$('#pkClose').onclick=closePicker;
 $('#picksheet').addEventListener('click',e=>{if(e.target.id==='picksheet')closePicker()});
