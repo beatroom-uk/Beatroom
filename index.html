@@ -436,9 +436,9 @@ html.ext .player,.player{bottom:0!important}
  <a class="brand" href="#drill"><svg viewBox="0 0 100 100" aria-hidden="true"><rect class="lg-bg" width="100" height="100" rx="22" fill="#0a0a0a"/><g fill-rule="evenodd"><path transform="translate(4 4)" fill="#ff3b2f" d="M10 24H31A12 12 0 0 1 31 48H33A14 14 0 0 1 33 76H10ZM21 33V39H30A3 3 0 0 0 30 33ZM21 57V67H32A5 5 0 0 0 32 57ZM55 24H75A12 12 0 0 1 80 46.5L89 76H77.5L70 50H66V76H55ZM66 33V40.5H74.5A3.75 3.75 0 0 0 74.5 33Z"/><path fill="#fff" d="M10 24H31A12 12 0 0 1 31 48H33A14 14 0 0 1 33 76H10ZM21 33V39H30A3 3 0 0 0 30 33ZM21 57V67H32A5 5 0 0 0 32 57ZM55 24H75A12 12 0 0 1 80 46.5L89 76H77.5L70 50H66V76H55ZM66 33V40.5H74.5A3.75 3.75 0 0 0 74.5 33Z"/></g></svg>BeatRoom</a>
  <button class="btn sm instbtn" id="installBtn" hidden>⬇ Install app</button>
  <nav class="tabs" id="tabs">
-  <a href="#drill" data-v="drill" style="--c:var(--drill)"><i></i>UK Drill<em id="n-drill">19</em></a>
-  <a href="#jazz" data-v="jazz" style="--c:var(--jazz)"><i></i>Jazz<em id="n-jazz">19</em></a>
-  <a href="#rock" data-v="rock" style="--c:var(--rock)"><i></i>Rock<em id="n-rock">19</em></a>
+  <a href="#drill" data-v="drill" style="--c:var(--drill)"><i></i>UK Drill<em id="n-drill">0</em></a>
+  <a href="#jazz" data-v="jazz" style="--c:var(--jazz)"><i></i>Jazz<em id="n-jazz">0</em></a>
+  <a href="#rock" data-v="rock" style="--c:var(--rock)"><i></i>Rock<em id="n-rock">0</em></a>
   <a href="#maker" data-v="maker"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="2.5" width="6" height="6" rx="1" fill="currentColor"/><rect x="11.5" y="2.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2.5" y="11.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="11.5" y="11.5" width="6" height="6" rx="1" fill="currentColor"/></svg>Maker</a>
   <a href="#studio" data-v="studio"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="2" width="6" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 9a6 6 0 0 0 12 0M10 15v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Studio</a>
  </nav>
@@ -699,6 +699,7 @@ const GEN={
 const BEATS=[];
 const SEEDB={jazz:2,rock:3,drill:4};Object.entries(GEN).forEach(([gk,G])=>G.titles.forEach((title,i)=>{const seed=SEEDB[gk]*100003+i*977;const b={id:gk+'-'+(i+1),gk,genre:G.name,col:G.col,title,seed,n:i,type:'synth'};
  G.build(b,mul(seed));b.lvl={drill:.42,rock:1,jazz:b.style==='swing'?1.7:1.2}[gk];b.bars=barsFor(b.bpm);b.dur=b.bars*240/b.bpm;BEATS.push(b)}));
+BEATS.length=0; /* built-in beats removed: only uploaded beats are listed */
 const UP=[];const all=()=>BEATS.concat(UP);const byId=id=>all().find(b=>b.id===id);
 
 /* ---------- player ---------- */
@@ -742,18 +743,19 @@ function art(b){const r=mul(b.seed+5);let s=`<svg viewBox="0 0 40 40" preserveAs
  for(let i=0;i<7;i++)s+=`<rect x="${3+i*5}" y="${(r()*20+12).toFixed(1)}" width="3" height="40" rx="1.5" style="fill:${b.col}" opacity="${(.3+r()*.6).toFixed(2)}"/>`;return s+'</svg>'}
 const cardHTML=b=>`<article class="card row" style="--c:${b.col}" data-id="${b.id}"><div class="cart">${art(b)}${b.up?`<span class="badge">${b.shared?(b.mine?'Your beat · Shared':'Shared'):b.local?(b.saved?'Saved ✓':'Not saved yet'):'Your upload'}</span>`:''}<button class="pp" data-act="play" aria-label="Play ${esc(b.title)}">${IPLAY}</button></div><div class="cb"><b>${esc(b.title)}</b><span class="meta"><span>${b.bpm?esc(b.bpm)+' BPM':'BPM –'}</span><span>${esc(b.key||'Key –')}</span><span>${fmt(b.dur)}</span></span><div class="prog"><i></i></div><div class="ra"><button class="btn sm" data-act="sing">Sing</button>${b.up&&b.asset&&ST.as?'<button class="btn sm" data-act="del">Remove</button>':''}${b.local&&!b.saved?'<button class="btn sm pri" data-act="save">Save</button>':''}${(b.local&&b.saved)||(b.shared&&b.mine)?'<button class="btn sm" data-act="del">Remove</button>':''}</div></div></article>`;
 const upTile=g=>`<label class="card uptile" style="--c:${GEN[g].col}"><input type="file" class="upin" data-g="${g}" multiple accept="${ACCEPT}" aria-label="Upload beats to ${GEN[g].name}"><span class="plus">+</span><b>Upload beats</b><span>${SB.on?'Everyone with the link will see it':'Add your own '+GEN[g].name+' beats'} · MP3, WAV, M4A up to 20 MB</span></label>`;
-const BLURB={drill:'Dark piano melodies, gliding 808 bass, triplet hi-hat rolls and off-beat snares at drill tempo.',jazz:'Swinging walking-bass grooves and laid-back jazz hip-hop with electric piano and vibraphone.',rock:'Distorted power chords, live-feel drums with fills, and room in every verse for a vocal.'};
+const BLURB={drill:'Dark piano, sliding 808s and skippy hi-hats. Upload your UK drill beats here.',jazz:'Smooth chords, swing and late-night grooves. Upload your jazz beats here.',rock:'Guitars, live drums and big choruses. Upload your rock beats here.'};
 const match=(b,s)=>!s||(b.title+' '+b.key+' '+b.bpm+' '+b.genre+' '+(b.desc||'')).toLowerCase().includes(s.toLowerCase());
 const canUp=()=>!ST.db||!!ST.as;
 const sortL=L=>{if(!sortBy)return L;const s=[...L];if(sortBy==='title')s.sort((a,b)=>a.title.localeCompare(b.title));else{const d=sortBy==='-bpm'?-1:1;s.sort((a,b)=>((+a.bpm||0)-(+b.bpm||0))*d)}return s};
-const range=k=>{const bp=BEATS.filter(b=>b.gk===k).map(b=>b.bpm);return Math.min(...bp)+'–'+Math.max(...bp)};
+const libOf=k=>UP.filter(b=>b.gk===k&&!b.mk);
+const range=k=>{const bp=libOf(k).map(b=>+b.bpm).filter(n=>n>0);return bp.length?Math.min(...bp)+'–'+Math.max(...bp):''};
 function renderChans(){const G=GEN[cat],U=UP.filter(b=>b.gk===cat).length;
- ORDER.forEach(k=>{const e=$('#n-'+k);if(e)e.textContent=19+UP.filter(b=>b.gk===k).length});
+ ORDER.forEach(k=>{const e=$('#n-'+k);if(e)e.textContent=libOf(k).length});
  $('#banner').style.setProperty('--c',G.col);$('#gname').textContent=G.name;$('#gdesc').textContent=BLURB[cat];
- $('#gstats').innerHTML=`<span><b>19</b> originals</span>${U?`<span><b>${U}</b> uploaded</span>`:''}<span><b>${range(cat)}</b> BPM</span><span><b>~2 min</b> each</span>`;
+ const rg=range(cat);$('#gstats').innerHTML=`<span><b>${U}</b> beat${U===1?'':'s'}</span>${rg?`<span><b>${rg}</b> BPM</span>`:''}`;
  const fu=$('#fup');fu.hidden=!canUp();fu.querySelector('input').dataset.g=cat;$('#fupl').textContent='Upload to '+G.name}
 function renderList(){const U=sortL(UP.filter(b=>b.gk===cat&&match(b,q))),L=sortL(BEATS.filter(b=>b.gk===cat&&match(b,q)));lastList=U.concat(L);
- $('#list').innerHTML=(canUp()&&!q?upTile(cat):'')+(U.length?U.map(cardHTML).join('')+`<div class="grp">BeatRoom originals</div>`:'')+(L.map(cardHTML).join('')||'<div class="empty">No beats match that search.</div>');
+ $('#list').innerHTML=(canUp()&&!q?upTile(cat):'')+(U.map(cardHTML).join('')||`<div class="empty">${q?'No beats match that search.':'No '+esc(GEN[cat].name)+' beats yet — tap Upload to add the first one.'}</div>`);
  $('#cnt').textContent=`${lastList.length} beats`;ui()}
 function renderUp(){renderChans();renderList()}
 function renderPicker(){const cats=[['all','All']].concat(ORDER.map(k=>[k,GEN[k].name]));
