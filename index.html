@@ -429,6 +429,15 @@ html.ext .player,.player{bottom:0!important}
 @media(max-width:600px){.pads{gap:8px}.pad{padding:10px}.mk-trans .btn{flex:1 1 30%}}
 @media(min-width:861px){.pad{aspect-ratio:5/4}}
 @media(max-width:600px){.tabs a{white-space:nowrap;font-size:10.5px!important;letter-spacing:.03em!important;gap:4px!important;padding:8px 1px!important;justify-content:center}.tabs a svg{width:13px;height:13px;flex:none}.tabs a i{width:7px!important;height:7px!important;flex:none}.tabs a.on::after{left:4px!important;right:4px!important}}
+
+.cb>b{display:flex;align-items:center;gap:6px;min-width:0}
+.cb>b .tt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ren{flex:none;background:transparent;border:1px solid #333;color:#cfcfca;width:30px;height:30px;display:grid;place-items:center;font-size:15px;line-height:1;cursor:pointer;padding:0}
+.ren:hover{border-color:#fff;color:#fff}
+.ren.ok{background:#fff;color:#000;border-color:#fff}
+.renbox{display:flex;gap:6px;align-items:center;width:100%;min-width:0}
+.reninp{flex:1;min-width:0;background:#000;border:1px solid #fff;color:#fff;font:600 16px Inter,sans-serif;padding:6px 8px;min-height:36px}
+@media(max-width:859px){.grid .card:not(.uptile) .cb{grid-template-areas:"t t" "m a" "p p"!important;row-gap:4px!important}.grid .card:not(.uptile) .cb>b{grid-area:t!important}.grid .card:not(.uptile) .cb>.meta{grid-area:m!important;align-self:center}.grid .card:not(.uptile) .cb>.ra{grid-area:a!important}}
 </style>
 </head>
 <body>
@@ -741,7 +750,7 @@ const metaHTML=b=>`<span class="g">${esc(b.genre)}</span><span>${b.bpm?esc(b.bpm
 const HUE={drill:215,jazz:40,rock:6};
 function art(b){const r=mul(b.seed+5);let s=`<svg viewBox="0 0 40 40" preserveAspectRatio="none" aria-hidden="true"><defs><radialGradient id="g${b.id}" cx=".3" cy=".25" r=".9"><stop offset="0" style="stop-color:hsl(${HUE[b.gk]} 30% 30%)"/><stop offset="1" style="stop-color:hsl(${HUE[b.gk]} 26% 10%)"/></radialGradient></defs><rect width="40" height="40" fill="url(#g${b.id})"/>`;
  for(let i=0;i<7;i++)s+=`<rect x="${3+i*5}" y="${(r()*20+12).toFixed(1)}" width="3" height="40" rx="1.5" style="fill:${b.col}" opacity="${(.3+r()*.6).toFixed(2)}"/>`;return s+'</svg>'}
-const cardHTML=b=>`<article class="card row" style="--c:${b.col}" data-id="${b.id}"><div class="cart">${art(b)}${b.up?`<span class="badge">${b.shared?(b.mine?'Your beat · Shared':'Shared'):b.local?(b.saved?'Saved ✓':'Not saved yet'):'Your upload'}</span>`:''}<button class="pp" data-act="play" aria-label="Play ${esc(b.title)}">${IPLAY}</button></div><div class="cb"><b>${esc(b.title)}</b><span class="meta"><span>${b.bpm?esc(b.bpm)+' BPM':'BPM –'}</span><span>${esc(b.key||'Key –')}</span><span>${fmt(b.dur)}</span></span><div class="prog"><i></i></div><div class="ra"><button class="btn sm" data-act="sing">Sing</button>${b.up&&b.asset&&ST.as?'<button class="btn sm" data-act="del">Remove</button>':''}${b.local&&!b.saved?'<button class="btn sm pri" data-act="save">Save</button>':''}${(b.local&&b.saved)||(b.shared&&b.mine)?'<button class="btn sm" data-act="del">Remove</button>':''}</div></div></article>`;
+const cardHTML=b=>`<article class="card row" style="--c:${b.col}" data-id="${b.id}"><div class="cart">${art(b)}${b.up?`<span class="badge">${b.shared?(b.mine?'Your beat · Shared':'Shared'):b.local?(b.saved?'Saved ✓':'Not saved yet'):'Your upload'}</span>`:''}<button class="pp" data-act="play" aria-label="Play ${esc(b.title)}">${IPLAY}</button></div><div class="cb"><b><span class="tt">${esc(b.title)}</span>${(b.shared&&b.mine)||(b.local&&b.saved)?`<button class="ren" data-act="ren" aria-label="Rename ${esc(b.title)}" title="Rename">✎</button>`:''}</b><span class="meta"><span>${b.bpm?esc(b.bpm)+' BPM':'BPM –'}</span><span>${esc(b.key||'Key –')}</span><span>${fmt(b.dur)}</span></span><div class="prog"><i></i></div><div class="ra"><button class="btn sm" data-act="sing">Sing</button>${b.up&&b.asset&&ST.as?'<button class="btn sm" data-act="del">Remove</button>':''}${b.local&&!b.saved?'<button class="btn sm pri" data-act="save">Save</button>':''}${(b.local&&b.saved)||(b.shared&&b.mine)?'<button class="btn sm" data-act="del">Remove</button>':''}</div></div></article>`;
 const upTile=g=>`<label class="card uptile" style="--c:${GEN[g].col}"><input type="file" class="upin" data-g="${g}" multiple accept="${ACCEPT}" aria-label="Upload beats to ${GEN[g].name}"><span class="plus">+</span><b>Upload beats</b><span>${SB.on?'Everyone with the link will see it':'Add your own '+GEN[g].name+' beats'} · MP3, WAV, M4A up to 20 MB</span></label>`;
 const BLURB={drill:'Dark piano, sliding 808s and skippy hi-hats. Upload your UK drill beats here.',jazz:'Smooth chords, swing and late-night grooves. Upload your jazz beats here.',rock:'Guitars, live drums and big choruses. Upload your rock beats here.'};
 const match=(b,s)=>!s||(b.title+' '+b.key+' '+b.bpm+' '+b.genre+' '+(b.desc||'')).toLowerCase().includes(s.toLowerCase());
@@ -847,7 +856,7 @@ document.addEventListener('click',e=>{const tk=e.target.closest('[data-tsave],[d
  if(d.sc){scat=d.sc;renderPicker();return}
  if(d.pick){select(byId(d.pick));closePicker();return}
  const row=t.closest('.row');if(!row)return;const b=byId(row.dataset.id);
- if(d.act==='play'){P.queue=lastList.map(x=>x.id);toggle(b)}else if(d.act==='del'){delBeat(b,t)}else if(d.act==='save'){saveLocal(b,t)}else{select(b);location.hash='studio'}});
+ if(d.act==='play'){P.queue=lastList.map(x=>x.id);toggle(b)}else if(d.act==='del'){delBeat(b,t)}else if(d.act==='save'){saveLocal(b,t)}else if(d.act==='ren'){startRename(b,row)}else{select(b);location.hash='studio'}});
 $('#fplay').onclick=()=>{if(P.b&&P.b.gk===cat){toggle(P.b);return}if(!lastList.length)return;P.queue=lastList.map(b=>b.id);toggle(lastList[0])};
 $('#q').addEventListener('input',e=>{q=e.target.value;renderList()});
 $('#sort').onchange=e=>{sortBy=e.target.value;renderList()};
@@ -926,6 +935,21 @@ function connectStore(){if(!(window.claude&&window.claude.use)){setMode();return
   db.collection('beats').orderBy('created','asc').onSnapshot(snap=>{if(!snap.metadata.fromCache){clearTimeout(tm);}
    const keep=UP.filter(u=>!u.doc);UP.length=0;snap.docs.forEach(d=>UP.push(fromDoc(d)));keep.forEach(u=>UP.push(u));renderUp();renderPicker()},
    e=>{clearTimeout(tm);toast('Saved beats couldn’t be loaded right now.')})})}
+/* ---------- rename your beat (shared: saved online for everyone) ---------- */
+function startRename(b,row){const bEl=row.querySelector('.cb>b');if(!bEl||bEl.querySelector('input'))return;
+ bEl.innerHTML=`<span class="renbox"><input class="reninp" maxlength="120" aria-label="New name"><button class="ren ok" data-rok="1" aria-label="Save name">✓</button><button class="ren no" data-rno="1" aria-label="Cancel">✕</button></span>`;
+ const inp=bEl.querySelector('input');inp.value=b.title;inp.focus();inp.select();
+ const done=()=>{renderList();renderPicker();ui()};
+ const save=async()=>{const name=inp.value.trim().replace(/\s+/g,' ').slice(0,120);if(!name||name===b.title){done();return}
+  inp.disabled=true;
+  try{if(b.shared){const r=await fetch(`${SB.url}/rest/v1/rpc/rename_beat`,{method:'POST',headers:sbH({'Content-Type':'application/json'}),body:JSON.stringify({beat_id:b.rid,token:SB.token,new_title:name})});
+    if(!r.ok)throw r.status;if(!(await r.json()))throw 'denied'}
+   else if(b.local){const db=await idbOpen();await new Promise((ok,no)=>{const tx=db.transaction('beats','readwrite'),st=tx.objectStore('beats'),g=st.get(b.id);g.onsuccess=()=>{const x=g.result;if(x){x.title=name;st.put(x)}};tx.oncomplete=ok;tx.onerror=()=>no(tx.error)})}
+   b.title=name;if(P.b===b)$('#mt').textContent=name;toast(b.shared?`Renamed to “${name}” for everyone.`:`Renamed to “${name}”.`);done()}
+  catch(e){toast('Couldn’t rename it right now. Check your internet and try again.');done()}};
+ inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();save()}else if(e.key==='Escape')done()});
+ bEl.querySelector('[data-rok]').addEventListener('click',e=>{e.stopPropagation();save()});
+ bEl.querySelector('[data-rno]').addEventListener('click',e=>{e.stopPropagation();done()});}
 async function delBeat(b,btn){if(b.shared){if(!b.mine)return;if(btn.dataset.sure!=='1'){btn.dataset.sure='1';btn.textContent='Tap again to delete';setTimeout(()=>{if(btn.isConnected){btn.dataset.sure='';btn.textContent='Remove'}},4000);return}
  btn.disabled=true;btn.textContent='Deleting…';
  try{const r=await fetch(`${SB.url}/rest/v1/rpc/delete_beat`,{method:'POST',headers:sbH({'Content-Type':'application/json'}),body:JSON.stringify({beat_id:b.rid,token:SB.token})});if(!r.ok)throw r.status;const p=await r.json();if(!p)throw 'none';
