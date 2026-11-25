@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#070707">
+<meta name="theme-color" content="#0b1a3d">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -440,6 +440,21 @@ html.ext .player,.player{bottom:0!important}
 @media(max-width:859px){.grid .card:not(.uptile) .cb{grid-template-areas:"t t" "m a" "p p"!important;row-gap:4px!important}.grid .card:not(.uptile) .cb>b{grid-area:t!important}.grid .card:not(.uptile) .cb>.meta{grid-area:m!important;align-self:center}.grid .card:not(.uptile) .cb>.ra{grid-area:a!important}}
 @media(max-width:600px){.tabs a{font-size:9.5px!important;letter-spacing:.02em!important;gap:3px!important}.tabs a svg{width:12px!important;height:12px!important}}
 @media(max-width:860px){html.ext .top .tabs{display:flex!important;overflow-x:auto;scrollbar-width:none;gap:2px;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}html.ext .top .tabs::-webkit-scrollbar{display:none}html.ext .tabs a{flex:none!important;padding:8px 10px!important;font-size:11px!important;scroll-snap-align:start}}
+
+/* ===== two-colour background: navy -> deep red ===== */
+html{background:#0a1024}
+body{background:linear-gradient(160deg,#0b1a3d 0%,#141634 38%,#3a0f1e 72%,#5a0f17 100%) fixed!important;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(700px 500px at 10% 0%,rgba(80,120,255,.18),transparent 60%),radial-gradient(800px 600px at 100% 100%,rgba(255,59,47,.18),transparent 60%)}
+.top{background:rgba(8,12,28,.82)!important;backdrop-filter:blur(10px)!important;border-bottom-color:rgba(255,255,255,.08)!important}
+@media(max-width:860px){.top{background:rgba(8,12,28,.94)!important}}
+.banner{background:repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 1px,transparent 1px 80px),radial-gradient(700px 360px at 10% 0%,color-mix(in srgb,var(--c) 22%,transparent),transparent 70%)!important;border-bottom-color:rgba(255,255,255,.08)!important}
+.grid .card,.card,.panel{background:rgba(8,10,20,.72)!important;border-color:rgba(255,255,255,.08)!important;backdrop-filter:blur(4px)}
+.grid .card.cur{background:rgba(14,16,30,.85)!important}
+.uptile{background:rgba(8,10,20,.55)!important}
+.toolbar input,.toolbar select,.search,textarea,.reninp{background:rgba(5,6,14,.75)!important}
+.player{background:rgba(6,8,18,.92)!important;backdrop-filter:blur(10px)}
+.pad{background:rgba(8,10,20,.75)}
+.mk-item,.take,.selbox,.stat,.pick{background:rgba(10,12,24,.75)!important}
 </style>
 </head>
 <body>
