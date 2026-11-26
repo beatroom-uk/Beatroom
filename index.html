@@ -530,6 +530,15 @@ html.is-admin .brand::after{content:"ADMIN";font:700 10px Inter,sans-serif;lette
 .mixhint{font-size:13px;color:var(--mut);margin:0}
 .hpr>span{align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14px}.hpr input{width:22px;height:22px;min-height:0;accent-color:var(--acc);flex:none}
 .btpre{display:flex;flex-wrap:wrap;gap:6px;margin-top:-4px}.btpre .chip{min-height:34px;font-size:12px;padding:6px 10px}
+.lyr{width:100%;text-align:left;margin:4px 0 14px;border:1px solid rgba(255,255,255,.12);background:rgba(5,6,14,.6)}
+.lyrtop{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.08);font:700 12px Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#cfcfd8}
+.lyropts{display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-weight:600}
+.lyropts label{display:flex;align-items:center;gap:6px;font-size:13px}.lyropts input{width:18px;height:18px;accent-color:var(--acc)}
+.lyropts .chip{min-height:30px;padding:4px 10px;font-size:13px}
+#lyrTxt{display:block;width:100%;min-height:200px;max-height:42vh;border:0!important;background:transparent!important;color:#fff;font:500 18px/1.65 Inter,sans-serif;padding:12px 14px;resize:vertical;outline:none;scroll-behavior:auto}
+#lyrTxt::placeholder{color:#6f7080}
+.lyr.big #lyrTxt{font-size:24px;line-height:1.55;font-weight:700}
+.lyrnote{font-size:12px;color:var(--mut);padding:6px 12px 8px}
 </style>
 </head>
 <body>
@@ -645,6 +654,11 @@ html.is-admin .brand::after{content:"ADMIN";font:700 10px Inter,sans-serif;lette
  </div></div>
  <div class="panel step"><span class="sn">2</span><div class="sbody micwrap">
   <h3>Sing</h3>
+  <div class="lyr">
+   <div class="lyrtop"><span>📝 Lyrics</span><span class="lyropts"><label><input type="checkbox" id="lyrAuto" checked> Auto-scroll</label><button type="button" class="chip" id="lyrBig">A+</button></span></div>
+   <textarea id="lyrTxt" placeholder="Write or paste your lyrics here…&#10;&#10;They stay on screen while you record, and scroll along with the beat." spellcheck="false"></textarea>
+   <div class="lyrnote" id="lyrNote">Saved on this phone for each beat.</div>
+  </div>
   <button class="micbtn" id="bRec" aria-label="Start recording"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="2.5" width="7" height="12" rx="3.5" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
   <span class="recl" id="recl">Tap to record</span>
   <div class="meter"><i id="mlev"></i></div>
@@ -914,13 +928,13 @@ function renderPicker(){const cats=[['all','All']].concat(ORDER.map(k=>[k,GEN[k]
  $('#schips').innerHTML=cats.map(([k,n])=>`<button class="chip${k===scat?' on':''}" data-sc="${k}">${esc(n)}</button>`).join('');
  const L=all().filter(b=>(scat==='all'||b.gk===scat)&&match(b,sq)).sort((x,y)=>ORDER.indexOf(x.gk)-ORDER.indexOf(y.gk));
  $('#picker').innerHTML=L.map(b=>`<button class="pick${sel===b?' sel':''}" style="--c:${b.col}" data-pick="${b.id}"><span class="dot"></span><span class="info"><b>${esc(b.title)}</b><span class="meta">${metaHTML(b)}</span></span></button>`).join('')||'<div class="empty">No beats match.</div>'}
-function select(b){sel=b;const box=$('#selbox');box.style.setProperty('--c',b.col);box.innerHTML=`<b>${esc(b.title)}</b><span class="meta">${metaHTML(b)}</span>`;$('#bPractice').disabled=false;renderPicker();ui()}
+function select(b){sel=b;try{lyrLoad()}catch(e){}const box=$('#selbox');box.style.setProperty('--c',b.col);box.innerHTML=`<b>${esc(b.title)}</b><span class="meta">${metaHTML(b)}</span>`;$('#bPractice').disabled=false;renderPicker();ui()}
 function ui(){const b=P.b;document.querySelectorAll('.row').forEach(r=>{const on=b&&r.dataset.id===b.id;r.classList.toggle('cur',!!on);const btn=r.querySelector('.pp');const pl=on&&P.playing;if(btn.dataset.s!==String(pl)){btn.innerHTML=pl?IPAUSE:IPLAY;btn.dataset.s=pl}if(!on)r.querySelector('.prog i').style.width='0'});
  $('#mpp').innerHTML=P.playing?IPAUSE:IPLAY;$('#mpp').setAttribute('aria-label',P.playing?'Pause':'Play');
  if(b){$('#mt').textContent=b.title;$('#mm').textContent=[b.genre,b.bpm?b.bpm+' BPM':'',b.key].filter(Boolean).join(' · ');$('#tdur').textContent=fmt(b.dur);document.querySelector('.player').style.setProperty('--c',b.col);$('#np').textContent=(P.playing?'Now playing: ':'Paused: ')+b.title}
  const fon=P.playing&&P.b&&P.b.gk===cat;$('#fpi').innerHTML=fon?IPAUSE:IPLAY;$('#fpl').textContent=fon?'Pause':'Play all';
  $('#bPractice').textContent=P.playing&&P.b===sel&&!rec.r?'Pause beat':'Play beat'}
-function frame(){const b=P.b;if(b){const p=pos(),f=b.dur?Math.min(1,p/b.dur):0;if(!P.drag){$('#tbar').style.width=(f*100)+'%';$('#tcur').textContent=fmt(p)}const r=document.querySelector(`.row[data-id="${b.id}"] .prog i`);if(r)r.style.width=(f*100)+'%'}
+function frame(){try{lyrTick()}catch(e){}const b=P.b;if(b){const p=pos(),f=b.dur?Math.min(1,p/b.dur):0;if(!P.drag){$('#tbar').style.width=(f*100)+'%';$('#tcur').textContent=fmt(p)}const r=document.querySelector(`.row[data-id="${b.id}"] .prog i`);if(r)r.style.width=(f*100)+'%'}
  if(view==='beats')drawViz();if(mic.an){const a=new Float32Array(mic.an.fftSize);mic.an.getFloatTimeDomainData(a);let m=0;for(const x of a)m=Math.max(m,Math.abs(x));$('#mlev').style.width=Math.min(100,m*140)+'%'}
  requestAnimationFrame(frame)}
 const cv=$('#viz'),cx=cv.getContext('2d');let vbuf=null,vt=0;
@@ -1029,6 +1043,16 @@ $('#bChoose').onclick=openPicker;$('#pkClose').onclick=closePicker;
 $('#picksheet').addEventListener('click',e=>{if(e.target.id==='picksheet')closePicker()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#picksheet').hidden)closePicker()});
 $('#bRec').onclick=recToggle;
+/* lyrics pad */
+const LY=$('#lyrTxt');let lyrT=null;
+function lyrKey(){return 'br-lyrics-'+(sel?sel.id:'none')}
+function lyrLoad(){let t='';try{t=localStorage.getItem(lyrKey())||''}catch(e){}LY.value=t;LY.scrollTop=0;$('#lyrNote').textContent=sel?`Lyrics for “${sel.title}” — saved on this phone.`:'Pick a beat, then write your lyrics.'}
+LY.addEventListener('input',()=>{clearTimeout(lyrT);lyrT=setTimeout(()=>{try{localStorage.setItem(lyrKey(),LY.value)}catch(e){}},300)});
+try{if(localStorage.getItem('br-lyrbig')==='1')document.querySelector('.lyr').classList.add('big')}catch(e){}
+$('#lyrBig').onclick=()=>{const on=document.querySelector('.lyr').classList.toggle('big');try{localStorage.setItem('br-lyrbig',on?'1':'0')}catch(e){}};
+let lyrUser=0;LY.addEventListener('touchstart',()=>{lyrUser=Date.now()},{passive:true});LY.addEventListener('wheel',()=>{lyrUser=Date.now()},{passive:true});
+function lyrTick(){if(!rec.r||!$('#lyrAuto').checked||!P.b||!P.b.dur||Date.now()-lyrUser<4000)return;const max=LY.scrollHeight-LY.clientHeight;if(max<=0)return;const f=Math.max(0,Math.min(1,pos()/P.b.dur));LY.scrollTop=f*max}
+lyrLoad();
 function mixUI(){$('#bvol').value=Math.round(MIXV.beat*100);$('#vvol').value=Math.round(MIXV.voice*100);$('#bvV').textContent=Math.round(MIXV.beat*100)+'%';$('#vvV').textContent=Math.round(MIXV.voice*100)+'%'}
 function mixStore(){try{localStorage.setItem('br-mix',JSON.stringify(MIXV))}catch(e){}}
 const inStudio=()=>view==='studio';
