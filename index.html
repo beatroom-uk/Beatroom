@@ -528,6 +528,7 @@ html.is-admin .brand::after{content:"ADMIN";font:700 10px Inter,sans-serif;lette
 .mixr span{display:flex;justify-content:space-between}.mixr b{color:#fff}
 .mixr input{width:100%;accent-color:var(--acc);min-height:32px}
 .mixhint{font-size:13px;color:var(--mut);margin:0}
+.hpr>span{align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14px}.hpr input{width:22px;height:22px;min-height:0;accent-color:var(--acc);flex:none}
 </style>
 </head>
 <body>
@@ -649,7 +650,8 @@ html.is-admin .brand::after{content:"ADMIN";font:700 10px Inter,sans-serif;lette
   <div class="mix">
    <label class="mixr"><span>🎵 Beat volume <b id="bvV">70%</b></span><input type="range" id="bvol" min="0" max="120" step="1" value="70" aria-label="Beat volume"></label>
    <label class="mixr"><span>🎤 Voice volume <b id="vvV">150%</b></span><input type="range" id="vvol" min="50" max="300" step="5" value="150" aria-label="Voice volume"></label>
-   <p class="mixhint">Turn the beat down and your voice up until they sound right together. You can change these while recording.</p>
+   <label class="mixr hpr"><span><span>🎧 I'm wearing wired headphones</span><input type="checkbox" id="hpchk"></span></label>
+   <p class="mixhint">No headphones? Leave this off — BeatRoom stops the beat from your speaker leaking into the mic, so it won't sound doubled. With wired headphones, tick it for the clearest voice.</p>
   </div>
   <div class="status" id="sstat">Choose a beat, then tap the mic. Wear headphones.</div>
   <div class="note warn" id="micNote" hidden></div>
@@ -925,8 +927,8 @@ function drawViz(){const W=cv.clientWidth,H=cv.clientHeight,dpr=devicePixelRatio
   const h=v*(H*.7),x=i*(W/n)+2,w=W/n-4;cx.fillStyle=col;cx.globalAlpha=.4+.6*v;cx.fillRect(x,H-12-h,w,h);cx.globalAlpha=.12;cx.fillRect(x,H-10,w,Math.min(8,h*.2))}
  cx.globalAlpha=1}
 /* ---------- studio mix sliders ---------- */
-const MIXV={beat:.7,voice:1.5};
-try{const m=JSON.parse(localStorage.getItem('br-mix')||'null');if(m&&isFinite(m.beat)&&isFinite(m.voice)){MIXV.beat=Math.max(0,Math.min(1.2,m.beat));MIXV.voice=Math.max(.5,Math.min(3,m.voice))}}catch(e){}
+const MIXV={beat:.7,voice:1.5,hp:false};
+try{const m=JSON.parse(localStorage.getItem('br-mix')||'null');if(m&&isFinite(m.beat)&&isFinite(m.voice)){MIXV.beat=Math.max(0,Math.min(1.2,m.beat));MIXV.voice=Math.max(.5,Math.min(3,m.voice));MIXV.hp=!!m.hp}}catch(e){}
 /* ---------- studio: choose beat, mic, my recordings ---------- */
 const mic={stream:null,src:null,gain:null,an:null},rec={r:null,chunks:[],b:null,ext:'webm',mime:'',t0:0};let downloads=null;
 const LTAKES=[];let STAKES=[],takeCol=null;const TBLOBS={};
@@ -937,7 +939,7 @@ function closePicker(){$('#picksheet').hidden=true}
 function micBlocked(){const n=$('#micNote');n.hidden=false;if(!window.claude){n.textContent='Microphone access was blocked. Tap the lock or ⓘ icon next to the web address, allow the Microphone, then reload the page and try again.';stat('');return}n.textContent='Your microphone is blocked here — the Claude app doesn’t let pages use it. To record, open the BeatRoom file I sent you in Chrome, Safari or Edge, and the mic button will work there.';stat('')}
 async function micOn(){if(mic.stream)return true;const c=ctx();
  try{if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw 0;
-  mic.stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  mic.stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:!MIXV.hp,noiseSuppression:!MIXV.hp,autoGainControl:false}});
   mic.src=c.createMediaStreamSource(mic.stream);mic.gain=c.createGain();mic.gain.gain.value=MIXV.voice;mic.an=c.createAnalyser();mic.an.fftSize=1024;mic.src.connect(mic.gain);mic.gain.connect(mic.an);$('#micNote').hidden=true;return true}
  catch(e){micBlocked();return false}}
 function recUI(){const on=!!rec.r,b=$('#bRec');b.classList.toggle('on',on);b.setAttribute('aria-label',on?'Stop recording':'Start recording');$('#recl').textContent=on?'Tap to stop':'Tap to record'}
@@ -1028,7 +1030,9 @@ function mixStore(){try{localStorage.setItem('br-mix',JSON.stringify(MIXV))}catc
 const inStudio=()=>view==='studio';
 $('#bvol').oninput=e=>{MIXV.beat=+e.target.value/100;$('#bvV').textContent=e.target.value+'%';if(P.beatGain&&(rec.r||inStudio()))P.beatGain.gain.value=MIXV.beat;mixStore()};
 $('#vvol').oninput=e=>{MIXV.voice=+e.target.value/100;$('#vvV').textContent=e.target.value+'%';if(mic.gain)mic.gain.gain.value=MIXV.voice;if(voc.g)voc.g.gain.value=MIXV.voice;mixStore()};
-mixUI();
+mixUI();$('#hpchk').checked=MIXV.hp;
+$('#hpchk').onchange=e=>{MIXV.hp=e.target.checked;mixStore();
+ if(mic.stream&&!rec.r){try{mic.stream.getTracks().forEach(t=>t.stop())}catch(x){}try{mic.src&&mic.src.disconnect()}catch(x){}mic.stream=null;mic.src=null;mic.gain=null;mic.an=null}};
 $('#vfile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;stat('Loading your vocal…');
  try{voc.buf=await ctx().decodeAudioData(await f.arrayBuffer());$('#vbox').hidden=false;$('#vname').textContent=`Vocal loaded: ${f.name} (${fmt(voc.buf.duration)})`;setOff(0);
   stat(sel?'Tap Preview to check the timing, then Save to My recordings.':'Now choose the beat you sang on (step 1).');if(!sel)openPicker()}
