@@ -519,6 +519,10 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;ba
 .brand::after{content:"";}
 html.is-admin .brand::after{content:"ADMIN";font:700 10px Inter,sans-serif;letter-spacing:.14em;background:var(--acc);color:#fff;padding:3px 6px;margin-left:8px;align-self:center}
 #fup[hidden],.btn[hidden],label[hidden]{display:none!important}
+.skb{flex:none;background:transparent;border:1px solid rgba(255,255,255,.25);color:#fff;font:700 12px Inter,sans-serif;letter-spacing:.04em;padding:6px 9px;min-height:32px;cursor:pointer;white-space:nowrap}
+.skb:hover{border-color:#fff}.skb:active{background:#fff;color:#000}
+.seek .track{height:28px!important}
+@media(max-width:600px){.skb{padding:4px 7px;font-size:11px;min-height:30px}.seek .track{height:24px!important}}
 </style>
 </head>
 <body>
@@ -669,7 +673,7 @@ html.is-admin .brand::after{content:"ADMIN";font:700 10px Inter,sans-serif;lette
 <div class="player"><div class="wrap pl">
  <button class="pp" id="mpp" aria-label="Play"></button>
  <div class="t"><b id="mt">Nothing playing</b><span id="mm">Pick a beat to start</span></div>
- <div class="seek"><span id="tcur">0:00</span><div class="track" id="track"><div><i id="tbar"></i></div></div><span id="tdur">0:00</span></div>
+ <div class="seek"><button class="skb" id="skB" aria-label="Back 10 seconds">↺ 10</button><span id="tcur">0:00</span><div class="track" id="track" role="slider" aria-label="Seek" tabindex="0"><div><i id="tbar"></i></div></div><span id="tdur">0:00</span><button class="skb" id="skF" aria-label="Forward 10 seconds">10 ↻</button></div>
  <input class="vol" type="range" id="vol" min="0" max="1" step=".01" value=".85" aria-label="Volume">
 </div></div>
 
@@ -900,7 +904,7 @@ function ui(){const b=P.b;document.querySelectorAll('.row').forEach(r=>{const on
  if(b){$('#mt').textContent=b.title;$('#mm').textContent=[b.genre,b.bpm?b.bpm+' BPM':'',b.key].filter(Boolean).join(' · ');$('#tdur').textContent=fmt(b.dur);document.querySelector('.player').style.setProperty('--c',b.col);$('#np').textContent=(P.playing?'Now playing: ':'Paused: ')+b.title}
  const fon=P.playing&&P.b&&P.b.gk===cat;$('#fpi').innerHTML=fon?IPAUSE:IPLAY;$('#fpl').textContent=fon?'Pause':'Play all';
  $('#bPractice').textContent=P.playing&&P.b===sel&&!rec.r?'Pause beat':'Play beat'}
-function frame(){const b=P.b;if(b){const p=pos(),f=b.dur?Math.min(1,p/b.dur):0;$('#tbar').style.width=(f*100)+'%';$('#tcur').textContent=fmt(p);const r=document.querySelector(`.row[data-id="${b.id}"] .prog i`);if(r)r.style.width=(f*100)+'%'}
+function frame(){const b=P.b;if(b){const p=pos(),f=b.dur?Math.min(1,p/b.dur):0;if(!P.drag){$('#tbar').style.width=(f*100)+'%';$('#tcur').textContent=fmt(p)}const r=document.querySelector(`.row[data-id="${b.id}"] .prog i`);if(r)r.style.width=(f*100)+'%'}
  if(view==='beats')drawViz();if(mic.an){const a=new Float32Array(mic.an.fftSize);mic.an.getFloatTimeDomainData(a);let m=0;for(const x of a)m=Math.max(m,Math.abs(x));$('#mlev').style.width=Math.min(100,m*140)+'%'}
  requestAnimationFrame(frame)}
 const cv=$('#viz'),cx=cv.getContext('2d');let vbuf=null,vt=0;
@@ -986,7 +990,15 @@ $('#sort').onchange=e=>{sortBy=e.target.value;renderList()};
 $('#sq').addEventListener('input',e=>{sq=e.target.value;renderPicker()});
 $('#mpp').onclick=()=>{if(P.b)toggle(P.b);else $('#fplay').click()};
 $('#vol').oninput=e=>{if(P.master)P.master.gain.value=+e.target.value};
-const tr=$('#track');tr.addEventListener('pointerdown',e=>{const r=tr.getBoundingClientRect();seek((e.clientX-r.left)/r.width)});
+const tr=$('#track');
+const trFrac=e=>{const r=tr.getBoundingClientRect();return Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))};
+tr.addEventListener('pointerdown',e=>{if(!P.b)return;e.preventDefault();P.drag=true;try{tr.setPointerCapture(e.pointerId)}catch(x){}const f=trFrac(e);$('#tbar').style.width=(f*100)+'%';$('#tcur').textContent=fmt(f*P.b.dur)});
+tr.addEventListener('pointermove',e=>{if(!P.drag||!P.b)return;const f=trFrac(e);$('#tbar').style.width=(f*100)+'%';$('#tcur').textContent=fmt(f*P.b.dur)});
+const trEnd=e=>{if(!P.drag)return;P.drag=false;if(P.b)seek(trFrac(e))};
+tr.addEventListener('pointerup',trEnd);tr.addEventListener('pointercancel',()=>{P.drag=false});
+function skip(d){const b=P.b;if(!b||!b.dur)return;const t=Math.max(0,Math.min(b.dur-.5,pos()+d));seek(t/b.dur);$('#tcur').textContent=fmt(t)}
+$('#skB').onclick=()=>skip(-10);$('#skF').onclick=()=>skip(10);
+tr.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'){e.preventDefault();skip(-5)}else if(e.key==='ArrowRight'){e.preventDefault();skip(5)}});
 document.addEventListener('keydown',e=>{if(e.code==='Space'&&!/INPUT|TEXTAREA|BUTTON|SELECT|SUMMARY/.test(e.target.tagName)&&P.b){e.preventDefault();toggle(P.b)}});
 function route(){let v=(location.hash||'').slice(1);if(!v)v='home';if(!ORDER.includes(v)&&!['studio','maker','home'].includes(v))v=cat;
  view=v==='studio'?'studio':v==='maker'?'maker':v==='home'?'home':'beats';if(view==='home')renderHome();if(ORDER.includes(v)&&v!==cat){cat=v;q='';$('#q').value='';}
