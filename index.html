@@ -455,6 +455,9 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;ba
 .player{background:rgba(6,8,18,.92)!important;backdrop-filter:blur(10px)}
 .pad{background:rgba(8,10,20,.75)}
 .mk-item,.take,.selbox,.stat,.pick{background:rgba(10,12,24,.75)!important}
+
+/* UK flag banner on the UK Drill cover */
+.banner[data-g=drill] .vizbox{background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.55)),url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2060%2030%27%20preserveAspectRatio%3D%27xMidYMid%20slice%27%3E%3CclipPath%20id%3D%27s%27%3E%3Cpath%20d%3D%27M0%2C0%20v30%20h60%20v-30%20z%27/%3E%3C/clipPath%3E%3CclipPath%20id%3D%27t%27%3E%3Cpath%20d%3D%27M30%2C15%20h30%20v15%20z%20v15%20h-30%20z%20h-30%20v-15%20z%20v-15%20h30%20z%27/%3E%3C/clipPath%3E%3Cg%20clip-path%3D%27url%28%23s%29%27%3E%3Cpath%20d%3D%27M0%2C0%20v30%20h60%20v-30%20z%27%20fill%3D%27%23012169%27/%3E%3Cpath%20d%3D%27M0%2C0%20L60%2C30%20M60%2C0%20L0%2C30%27%20stroke%3D%27%23fff%27%20stroke-width%3D%276%27/%3E%3Cpath%20d%3D%27M0%2C0%20L60%2C30%20M60%2C0%20L0%2C30%27%20clip-path%3D%27url%28%23t%29%27%20stroke%3D%27%23C8102E%27%20stroke-width%3D%274%27/%3E%3Cpath%20d%3D%27M30%2C0%20v30%20M0%2C15%20h60%27%20stroke%3D%27%23fff%27%20stroke-width%3D%2710%27/%3E%3Cpath%20d%3D%27M30%2C0%20v30%20M0%2C15%20h60%27%20stroke%3D%27%23C8102E%27%20stroke-width%3D%276%27/%3E%3C/g%3E%3C/svg%3E") center/cover no-repeat!important;box-shadow:12px 12px 0 #c8102e!important;border-color:rgba(255,255,255,.25)!important}
 </style>
 </head>
 <body>
@@ -781,7 +784,7 @@ const libOf=k=>UP.filter(b=>b.gk===k&&!b.mk);
 const range=k=>{const bp=libOf(k).map(b=>+b.bpm).filter(n=>n>0);return bp.length?Math.min(...bp)+'–'+Math.max(...bp):''};
 function renderChans(){const G=GEN[cat],U=UP.filter(b=>b.gk===cat).length;
  ORDER.forEach(k=>{const e=$('#n-'+k);if(e)e.textContent=libOf(k).length});
- $('#banner').style.setProperty('--c',G.col);$('#gname').textContent=G.name;$('#gdesc').textContent=BLURB[cat];
+ $('#banner').style.setProperty('--c',G.col);$('#banner').dataset.g=cat;$('#gname').textContent=G.name;$('#gdesc').textContent=BLURB[cat];
  const rg=range(cat);$('#gstats').innerHTML=`<span><b>${U}</b> beat${U===1?'':'s'}</span>${rg?`<span><b>${rg}</b> BPM</span>`:''}`;
  const fu=$('#fup');fu.hidden=!canUp();fu.querySelector('input').dataset.g=cat;$('#fupl').textContent='Upload to '+G.name}
 function renderList(){const U=sortL(UP.filter(b=>b.gk===cat&&match(b,q))),L=sortL(BEATS.filter(b=>b.gk===cat&&match(b,q)));lastList=U.concat(L);
