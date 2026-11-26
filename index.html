@@ -529,6 +529,7 @@ html.is-admin .brand::after{content:"ADMIN";font:700 10px Inter,sans-serif;lette
 .mixr input{width:100%;accent-color:var(--acc);min-height:32px}
 .mixhint{font-size:13px;color:var(--mut);margin:0}
 .hpr>span{align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14px}.hpr input{width:22px;height:22px;min-height:0;accent-color:var(--acc);flex:none}
+.btpre{display:flex;flex-wrap:wrap;gap:6px;margin-top:-4px}.btpre .chip{min-height:34px;font-size:12px;padding:6px 10px}
 </style>
 </head>
 <body>
@@ -651,6 +652,9 @@ html.is-admin .brand::after{content:"ADMIN";font:700 10px Inter,sans-serif;lette
    <label class="mixr"><span>🎵 Beat volume <b id="bvV">70%</b></span><input type="range" id="bvol" min="0" max="120" step="1" value="70" aria-label="Beat volume"></label>
    <label class="mixr"><span>🎤 Voice volume <b id="vvV">150%</b></span><input type="range" id="vvol" min="50" max="300" step="5" value="150" aria-label="Voice volume"></label>
    <label class="mixr hpr"><span><span>🎧 I'm wearing wired headphones</span><input type="checkbox" id="hpchk"></span></label>
+   <label class="mixr"><span>🔵 Bluetooth delay fix <b id="btV">Off</b></span><input type="range" id="btd" min="0" max="400" step="10" value="0" aria-label="Bluetooth delay fix in milliseconds"></label>
+   <div class="btpre"><button type="button" class="chip" data-bt="0">Off</button><button type="button" class="chip" data-bt="150">Light</button><button type="button" class="chip" data-bt="220">Normal Bluetooth</button><button type="button" class="chip" data-bt="300">Strong</button></div>
+   <p class="mixhint">Using Bluetooth earbuds? Pick <b>Normal Bluetooth</b>. If your voice still sounds behind the beat, move it right; if it sounds ahead, move it left.</p>
    <p class="mixhint">No headphones? Leave this off — BeatRoom stops the beat from your speaker leaking into the mic, so it won't sound doubled. With wired headphones, tick it for the clearest voice.</p>
   </div>
   <div class="status" id="sstat">Choose a beat, then tap the mic. Wear headphones.</div>
@@ -850,7 +854,7 @@ function ctx(){iosUnlock();if(!P.ctx){const c=P.ctx=new(window.AudioContext||win
   P.master=c.createGain();P.master.gain.value=+$('#vol').value;P.beatGain=c.createGain();P.beatGain.connect(P.master);
   const c1=c.createDynamicsCompressor();c1.threshold.value=-14;c1.ratio.value=3;const comp=c.createDynamicsCompressor();comp.threshold.value=-3;comp.ratio.value=20;comp.attack.value=.002;P.master.connect(c1);c1.connect(comp);
   P.an=c.createAnalyser();P.an.fftSize=512;P.an.smoothingTimeConstant=.8;comp.connect(P.an);P.an.connect(c.destination);
-  P.recDest=c.createMediaStreamDestination?c.createMediaStreamDestination():null;if(P.recDest)comp.connect(P.recDest)}
+  P.recDest=c.createMediaStreamDestination?c.createMediaStreamDestination():null;if(P.recDest){P.recDelay=c.createDelay(1);P.recDelay.delayTime.value=0;comp.connect(P.recDelay);P.recDelay.connect(P.recDest)}}
  if(P.ctx.state==='suspended')P.ctx.resume();return P.ctx}
 const sdOf=b=>15/b.bpm;
 function pos(){const b=P.b;if(!b)return 0;if(!P.playing)return P.paused[b.id]||0;const c=P.ctx;
@@ -927,8 +931,8 @@ function drawViz(){const W=cv.clientWidth,H=cv.clientHeight,dpr=devicePixelRatio
   const h=v*(H*.7),x=i*(W/n)+2,w=W/n-4;cx.fillStyle=col;cx.globalAlpha=.4+.6*v;cx.fillRect(x,H-12-h,w,h);cx.globalAlpha=.12;cx.fillRect(x,H-10,w,Math.min(8,h*.2))}
  cx.globalAlpha=1}
 /* ---------- studio mix sliders ---------- */
-const MIXV={beat:.7,voice:1.5,hp:false};
-try{const m=JSON.parse(localStorage.getItem('br-mix')||'null');if(m&&isFinite(m.beat)&&isFinite(m.voice)){MIXV.beat=Math.max(0,Math.min(1.2,m.beat));MIXV.voice=Math.max(.5,Math.min(3,m.voice));MIXV.hp=!!m.hp}}catch(e){}
+const MIXV={beat:.7,voice:1.5,hp:false,bt:0};
+try{const m=JSON.parse(localStorage.getItem('br-mix')||'null');if(m&&isFinite(m.beat)&&isFinite(m.voice)){MIXV.beat=Math.max(0,Math.min(1.2,m.beat));MIXV.voice=Math.max(.5,Math.min(3,m.voice));MIXV.hp=!!m.hp;MIXV.bt=Math.max(0,Math.min(.5,+m.bt||0))}}catch(e){}
 /* ---------- studio: choose beat, mic, my recordings ---------- */
 const mic={stream:null,src:null,gain:null,an:null},rec={r:null,chunks:[],b:null,ext:'webm',mime:'',t0:0};let downloads=null;
 const LTAKES=[];let STAKES=[],takeCol=null;const TBLOBS={};
@@ -950,9 +954,9 @@ async function recToggle(){if(rec.r){endTake();return}if(!sel){openPicker();retu
  try{rec.r=new MediaRecorder(P.recDest.stream,m?{mimeType:m}:undefined)}catch(e){rec.r=null;stat('Recording isn’t supported in this browser.');return}
  rec.r.ondataavailable=e=>{if(e.data&&e.data.size)rec.chunks.push(e.data)};
  rec.r.onstop=()=>{const blob=new Blob(rec.chunks,{type:(rec.r&&rec.r.mimeType)||rec.mime}),b=rec.b,dur=(Date.now()-rec.t0)/1000;rec.r=null;try{mic.gain.disconnect(P.recDest)}catch(e){}P.beatGain.gain.value=1;recUI();if(blob.size)saveTake(blob,b,dur)};
- P.queue=null;P.beatGain.gain.value=MIXV.beat;mic.gain.connect(P.recDest);rec.r.start(250);rec.t0=Date.now();start(sel,0,{countIn:true,onEnd:endTake});recUI();
+ P.queue=null;P.beatGain.gain.value=MIXV.beat;mic.gain.connect(P.recDest);if(P.recDelay)P.recDelay.delayTime.value=MIXV.bt;rec.r.start(250);rec.t0=Date.now();start(sel,0,{countIn:true,onEnd:endTake});recUI();
  stat('● Recording — start singing after the 4 clicks. Tap the mic to stop.',true)}
-function endTake(){clearTimeout(voc.t);vocStop();if(rec.r&&rec.r.state!=='inactive'){rec.r.stop();if(P.playing)pause()}}
+function endTake(){clearTimeout(voc.t);vocStop();if(rec.r&&rec.r.state!=='inactive'&&!rec.stopping){rec.stopping=true;const r=rec.r,tail=(P.recDelay?P.recDelay.delayTime.value:0);if(P.playing)pause();setTimeout(()=>{rec.stopping=false;try{if(r.state!=='inactive')r.stop()}catch(e){}},tail*1000+60)}}
 const voc={buf:null,src:null,t:null,prev:false};
 function setOff(v){v=Math.max(-15,Math.min(5,Math.round(v*10)/10));$('#voff').value=v;$('#offv').textContent=(v>0?'+':'')+v.toFixed(1)+' s'}
 function vocStart(at0){const c=P.ctx,s=voc.src=c.createBufferSource();s.buffer=voc.buf;const g=c.createGain();g.gain.value=MIXV.voice;voc.g=g;s.connect(g);g.connect(P.master);const off=+$('#voff').value;
@@ -968,7 +972,7 @@ function mixSave(){if(rec.r||!voc.buf||!needBeat(mixSave))return;if(voc.prev){vo
  try{rec.r=new MediaRecorder(P.recDest.stream,m?{mimeType:m}:undefined)}catch(e){rec.r=null;stat('Saving mixes isn’t supported in this browser.');return}
  rec.r.ondataavailable=e=>{if(e.data&&e.data.size)rec.chunks.push(e.data)};
  rec.r.onstop=()=>{const blob=new Blob(rec.chunks,{type:(rec.r&&rec.r.mimeType)||rec.mime}),b=rec.b,dur=(Date.now()-rec.t0)/1000;rec.r=null;P.beatGain.gain.value=1;$('#vsave').disabled=false;$('#vprev').disabled=false;recUI();if(blob.size)saveTake(blob,b,dur)};
- P.queue=null;P.beatGain.gain.value=MIXV.beat;rec.r.start(250);rec.t0=Date.now();start(sel,0,{onEnd:endTake});const endAt=Math.min(vocStart(P.t0),P.t0+sel.dur);
+ P.queue=null;P.beatGain.gain.value=MIXV.beat;if(P.recDelay)P.recDelay.delayTime.value=0;rec.r.start(250);rec.t0=Date.now();start(sel,0,{onEnd:endTake});const endAt=Math.min(vocStart(P.t0),P.t0+sel.dur);
  const total=endAt-P.ctx.currentTime;voc.t=setTimeout(endTake,Math.max(500,total*1000+800));$('#vsave').disabled=true;$('#vprev').disabled=true;
  const tick=()=>{if(!rec.r)return;stat(`● Mixing your vocal onto the beat… ${fmt((Date.now()-rec.t0)/1000)} / ${fmt(total)} — keep this page open`,true);setTimeout(tick,500)};tick()}
 const when=()=>new Date().toLocaleString([], {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
@@ -1031,6 +1035,9 @@ const inStudio=()=>view==='studio';
 $('#bvol').oninput=e=>{MIXV.beat=+e.target.value/100;$('#bvV').textContent=e.target.value+'%';if(P.beatGain&&(rec.r||inStudio()))P.beatGain.gain.value=MIXV.beat;mixStore()};
 $('#vvol').oninput=e=>{MIXV.voice=+e.target.value/100;$('#vvV').textContent=e.target.value+'%';if(mic.gain)mic.gain.gain.value=MIXV.voice;if(voc.g)voc.g.gain.value=MIXV.voice;mixStore()};
 mixUI();$('#hpchk').checked=MIXV.hp;
+function btUI(){const ms=Math.round(MIXV.bt*1000);$('#btd').value=ms;$('#btV').textContent=ms?ms+' ms':'Off';document.querySelectorAll('[data-bt]').forEach(c=>c.classList.toggle('on',+c.dataset.bt===ms))}
+$('#btd').oninput=e=>{MIXV.bt=+e.target.value/1000;btUI();mixStore()};
+document.querySelectorAll('[data-bt]').forEach(c=>c.onclick=()=>{MIXV.bt=+c.dataset.bt/1000;btUI();mixStore()});btUI();
 $('#hpchk').onchange=e=>{MIXV.hp=e.target.checked;mixStore();
  if(mic.stream&&!rec.r){try{mic.stream.getTracks().forEach(t=>t.stop())}catch(x){}try{mic.src&&mic.src.disconnect()}catch(x){}mic.stream=null;mic.src=null;mic.gain=null;mic.an=null}};
 $('#vfile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;stat('Loading your vocal…');
