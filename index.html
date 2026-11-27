@@ -539,6 +539,7 @@ html.is-admin .brand::after{content:"ADMIN";font:700 10px Inter,sans-serif;lette
 #lyrTxt::placeholder{color:#6f7080}
 .lyr.big #lyrTxt{font-size:24px;line-height:1.55;font-weight:700}
 .lyrnote{font-size:12px;color:var(--mut);padding:6px 12px 8px}
+.mxtr{display:flex;align-items:center;gap:12px;margin:6px 0}.mxseek{width:100%;accent-color:var(--acc);min-height:32px;margin-bottom:8px}.mxsel{background:#111;color:#fff;border:1px solid var(--line);padding:8px;font-size:15px;min-height:40px;width:100%}#mxEd.dim .mix,#mxEd.dim .mxtr,#mxEd.dim .mxseek{opacity:.45;pointer-events:none}.mxv.on{outline:2px solid var(--c)}.mixhint a{color:#fff}
 </style>
 </head>
 <body>
@@ -553,6 +554,7 @@ html.is-admin .brand::after{content:"ADMIN";font:700 10px Inter,sans-serif;lette
   <a href="#afro" data-v="afro" style="--c:var(--afro)"><i></i>Afro<em id="n-afro">0</em></a>
   <a href="#maker" data-v="maker"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="2.5" width="6" height="6" rx="1" fill="currentColor"/><rect x="11.5" y="2.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2.5" y="11.5" width="6" height="6" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="11.5" y="11.5" width="6" height="6" rx="1" fill="currentColor"/></svg>Maker</a>
   <a href="#studio" data-v="studio"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="2" width="6" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 9a6 6 0 0 0 12 0M10 15v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Studio</a>
+  <a href="#mix" data-v="mix"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2v16M10 2v16M15 2v16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="2.5" y="11" width="5" height="3" rx="1" fill="currentColor"/><rect x="7.5" y="5" width="5" height="3" rx="1" fill="currentColor"/><rect x="12.5" y="9" width="5" height="3" rx="1" fill="currentColor"/></svg>Mix</a>
  </nav>
 </div></header>
 
@@ -688,7 +690,46 @@ html.is-admin .brand::after{content:"ADMIN";font:700 10px Inter,sans-serif;lette
  </div></div>
  <div class="panel step"><span class="sn">3</span><div class="sbody">
   <h3>My recordings</h3>
+  <p class="mixhint">🎛 Want autotune, echo or reverb? Your voice from every take is saved in the <a href="#mix"><b>Mix Room</b></a>.</p>
   <div class="takes" id="takes"></div>
+ </div></div>
+</div></section>
+<section class="view" id="v-mix"><div class="wrap studio">
+ <div class="shead"><span class="eyebrow">Mix room</span><h1>Edit your vocals</h1></div>
+ <div class="panel step"><span class="sn">1</span><div class="sbody">
+  <h3>Pick your vocal</h3>
+  <p class="mixhint">Every take you record in the Studio saves your voice here on its own, so you can autotune it and mix it with the beat.</p>
+  <div class="takes" id="mxList"></div>
+  <div class="acts"><label class="btn" id="mxUp"><input type="file" id="mxFile" class="upin" accept="audio/*,.m4a,.mp3,.wav,.aac,.ogg,.webm" aria-label="Upload a vocal">Upload a vocal</label></div>
+ </div></div>
+ <div class="panel step"><span class="sn">2</span><div class="sbody">
+  <h3>Beat</h3>
+  <div class="selbox" id="mxBeat"><span class="count">No beat chosen yet</span></div>
+  <div class="acts"><button class="btn" id="mxPickB">Change beat</button></div>
+ </div></div>
+ <div class="panel step"><span class="sn">3</span><div class="sbody" id="mxEd">
+  <h3>Edit &amp; mix</h3>
+  <div class="mxtr"><button class="btn pri" id="mxPlay">▶ Play mix</button><span class="count" id="mxT">0:00 / 0:00</span></div>
+  <input type="range" id="mxSeek" class="mxseek" min="0" max="1000" value="0" aria-label="Position">
+  <div class="mix">
+   <div class="mixr"><span>🎚 Autotune</span><div class="btpre"><button type="button" class="chip" data-mat="off">Off</button><button type="button" class="chip" data-mat="natural">Natural</button><button type="button" class="chip" data-mat="hard">Hard (T-Pain)</button></div></div>
+   <div class="mixr" id="mxKeyRow"><span>🎹 Key</span>
+    <div class="btpre"><button type="button" class="chip" data-msc="minor">Minor</button><button type="button" class="chip" data-msc="major">Major</button><button type="button" class="chip" data-msc="chrom">Any note</button></div>
+    <select id="mxKey" class="mxsel" aria-label="Key"></select>
+    <p class="mixhint" id="mxKeyN"></p>
+    <p class="mixhint">Not sure? Leave it on <b>Auto</b> + <b>Minor</b> — most drill beats are minor.</p>
+   </div>
+   <div class="mixr"><span>✨ Vocal sound</span><div class="btpre"><button type="button" class="chip" data-mtone="studio">Smooth</button><button type="button" class="chip" data-mtone="clean">Clean</button><button type="button" class="chip" data-mtone="raw">Raw</button></div></div>
+   <label class="mixr"><span>🌫 Reverb <b id="mx_revV">45%</b></span><input type="range" id="mx_rev" min="0" max="100" step="1"></label>
+   <label class="mixr"><span>🔁 Echo <b id="mx_echoV">0%</b></span><input type="range" id="mx_echo" min="0" max="100" step="1"></label>
+   <label class="mixr"><span>🎵 Beat volume <b id="mx_bvV">70%</b></span><input type="range" id="mx_bv" min="0" max="150" step="1"></label>
+   <label class="mixr"><span>🎤 Vocal volume <b id="mx_vvV">100%</b></span><input type="range" id="mx_vv" min="0" max="300" step="5"></label>
+   <label class="mixr"><span>⏱ Line up voice <b id="mx_nudV">0 ms</b></span><input type="range" id="mx_nud" min="-500" max="500" step="5"></label>
+   <div class="btpre"><button type="button" class="chip" data-mnud="-50">−50</button><button type="button" class="chip" data-mnud="-10">−10</button><button type="button" class="chip" data-mnud="10">+10</button><button type="button" class="chip" data-mnud="50">+50</button></div>
+   <p class="mixhint">Voice behind the beat? Move “Line up” left. Ahead of it? Move it right.</p>
+  </div>
+  <div class="acts"><button class="btn pri" id="mxSave">💾 Save mix</button><button class="btn" id="mxDl" hidden>Save to phone</button></div>
+  <div class="status" id="mxStat">Pick a vocal to start.</div>
  </div></div>
 </div></section>
 </main>
@@ -969,7 +1010,7 @@ const LTAKES=[];let STAKES=[],takeCol=null;const TBLOBS={};
 const stat=(t,live)=>{const s=$('#sstat');s.textContent=t;s.classList.toggle('live',!!live)};
 function pickMime(){if(!window.MediaRecorder)return null;for(const m of ['audio/webm;codecs=opus','audio/webm','audio/mp4'])if(!MediaRecorder.isTypeSupported||MediaRecorder.isTypeSupported(m))return m;return ''}
 function openPicker(){renderPicker();$('#picksheet').hidden=false;$('#sq').value='';sq='';renderPicker()}
-function closePicker(){$('#picksheet').hidden=true}
+function closePicker(){$('#picksheet').hidden=true;if(typeof MX!=='undefined')MX.picking=false}
 function micBlocked(){const n=$('#micNote');n.hidden=false;if(!window.claude){n.textContent='Microphone access was blocked. Tap the lock or ⓘ icon next to the web address, allow the Microphone, then reload the page and try again.';stat('');return}n.textContent='Your microphone is blocked here — the Claude app doesn’t let pages use it. To record, open the BeatRoom file I sent you in Chrome, Safari or Edge, and the mic button will work there.';stat('')}
 async function micOn(){if(mic.stream)return true;const c=ctx();
  try{if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw 0;
@@ -983,10 +1024,13 @@ async function recToggle(){if(rec.r){endTake();return}if(!sel){openPicker();retu
  rec.chunks=[];rec.b=sel;rec.mime=m||'audio/webm';rec.ext=rec.mime.includes('mp4')?'mp4':'webm';
  try{rec.r=new MediaRecorder(P.recDest.stream,Object.assign(m?{mimeType:m}:{},{audioBitsPerSecond:192000}))}catch(e){rec.r=null;stat('Recording isn’t supported in this browser.');return}
  rec.r.ondataavailable=e=>{if(e.data&&e.data.size)rec.chunks.push(e.data)};
+ rec.vr=null;try{const pc=P.ctx;if(pc.createMediaStreamDestination){if(!mic.vd){mic.vd=pc.createMediaStreamDestination();mic.src.connect(mic.vd)}rec.vchunks=[];rec.vr=new MediaRecorder(mic.vd.stream,Object.assign(m?{mimeType:m}:{},{audioBitsPerSecond:160000}));rec.vr.ondataavailable=e=>{if(e.data&&e.data.size)rec.vchunks.push(e.data)}}}catch(e){rec.vr=null}
  rec.r.onstop=()=>{const blob=new Blob(rec.chunks,{type:(rec.r&&rec.r.mimeType)||rec.mime}),b=rec.b,dur=(Date.now()-rec.t0)/1000;rec.r=null;try{mic.fx.out.disconnect(P.recDest)}catch(e){}P.beatGain.gain.value=1;recUI();if(blob.size)saveTake(blob,b,dur)};
- P.queue=null;P.beatGain.gain.value=MIXV.beat;mic.fx.out.connect(P.recDest);setVox(mic.fx);if(P.recDelay)P.recDelay.delayTime.value=MIXV.bt;rec.r.start(250);rec.t0=Date.now();start(sel,0,{countIn:true,onEnd:endTake});recUI();
+ P.queue=null;P.beatGain.gain.value=MIXV.beat;mic.fx.out.connect(P.recDest);setVox(mic.fx);if(P.recDelay)P.recDelay.delayTime.value=MIXV.bt;if(rec.vr){try{rec.vr.start(250);rec.vt0=P.ctx.currentTime}catch(e){rec.vr=null}}rec.r.start(250);rec.t0=Date.now();start(sel,0,{countIn:true,onEnd:endTake});
+ if(rec.vr){const vr=rec.vr,vb=sel,vch=rec.vchunks,vt=Date.now(),lead=Math.max(0,P.t0-rec.vt0+MIXV.bt+(P.ctx.outputLatency||P.ctx.baseLatency||0));vr.onstop=()=>{const blob=new Blob(vch,{type:vr.mimeType||rec.mime});if(blob.size>2000&&typeof vxAdd==='function')vxAdd({id:'v'+Date.now(),title:vb.title,beatId:vb.id,genre:vb.gk,when:when(),dur:(Date.now()-vt)/1000,lead,blob,created:Date.now()})}}
+ recUI();
  stat('● Recording — start singing after the 4 clicks. Tap the mic to stop.',true)}
-function endTake(){clearTimeout(voc.t);vocStop();if(rec.r&&rec.r.state!=='inactive'&&!rec.stopping){rec.stopping=true;const r=rec.r,tail=(P.recDelay?P.recDelay.delayTime.value:0);if(P.playing)pause();setTimeout(()=>{rec.stopping=false;try{if(r.state!=='inactive')r.stop()}catch(e){}},tail*1000+60)}}
+function endTake(){clearTimeout(voc.t);vocStop();if(rec.r&&rec.r.state!=='inactive'&&!rec.stopping){rec.stopping=true;const r=rec.r,vr=rec.vr;rec.vr=null;tail=(P.recDelay?P.recDelay.delayTime.value:0);if(P.playing)pause();setTimeout(()=>{rec.stopping=false;try{if(r.state!=='inactive')r.stop()}catch(e){}try{if(vr&&vr.state!=='inactive')vr.stop()}catch(e){}},tail*1000+60)}}
 const voc={buf:null,src:null,t:null,prev:false};
 function setOff(v){v=Math.max(-15,Math.min(5,Math.round(v*10)/10));$('#voff').value=v;$('#offv').textContent=(v>0?'+':'')+v.toFixed(1)+' s'}
 function vocStart(at0){const c=P.ctx,s=voc.src=c.createBufferSource();s.buffer=voc.buf;const g=c.createGain();g.gain.value=MIXV.voice;voc.g=g;s.connect(g);const vfx=buildVox(c);setVox(vfx);g.connect(vfx.in);vfx.out.connect(P.master);const off=+$('#voff').value;
@@ -1018,7 +1062,7 @@ function renderTakes(){const L=takeList(),box=$('#takes');
  box.innerHTML=L.map(t=>{const g=GEN[t.genre]||GEN.drill;return `<div class="take" style="--c:${g.col}" data-tid="${esc(t.id)}"><div class="r"><b>${esc(t.title)}</b><span class="count">${esc(t.when)} · ${fmt(t.dur)}</span></div><audio controls preload="none" src="${t.url?t.url:'/_blob/'+t.asset}"></audio><div class="acts" style="margin:0">${downloads||t.url?'<button class="btn sm" data-tsave="1">Save to phone</button>':''}<button class="btn sm" data-tdel="1">Delete</button></div></div>`}).join('')}
 async function takeBlob(t){if(t.blob)return t.blob;if(TBLOBS[t.asset])return TBLOBS[t.asset];const r=await fetch('/_blob/'+t.asset);if(!r.ok)throw 0;return TBLOBS[t.asset]=await r.blob()}
 async function takeAction(el,kind){const id=el.closest('[data-tid]').dataset.tid,t=takeList().find(x=>x.id===id);if(!t)return;
- if(kind==='save'){const name=`${t.title} – my take.${t.ext==='mp4'?'mp4':'webm'}`;
+ if(kind==='save'){const name=`${t.title} – my take.${t.ext==='mp4'?'mp4':t.ext==='wav'?'wav':'webm'}`;
   try{const blob=await takeBlob(t);if(downloads){await downloads.save({filename:name,data:blob});el.textContent='Saved ✓'}else{const a=document.createElement('a');a.href=t.url||URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();a.remove()}}
   catch(e){el.textContent=e&&e.code==='declined'?'Save to phone':'Couldn’t save'}return}
  if(el.dataset.sure!=='1'){el.dataset.sure='1';el.textContent='Tap again to delete';setTimeout(()=>{if(el.isConnected){el.dataset.sure='';el.textContent='Delete'}},4000);return}
@@ -1027,10 +1071,157 @@ async function takeAction(el,kind){const id=el.closest('[data-tid]').dataset.tid
 function connectTakes(db){if(!(window.claude&&window.claude.use)||!db)return;
  window.claude.use('user').then(u=>u&&u.id()).then(uid=>{if(!uid)return;takeCol=db.collection('data/users/'+uid);
   takeCol.orderBy('created','desc').onSnapshot(s=>{STAKES=s.docs.map(d=>{const x=d.data()||{};return{id:'s'+d.id,doc:d.id,title:String(x.title||'Recording').slice(0,120),genre:GEN[x.genre]?x.genre:'drill',when:String(x.when||'').slice(0,40),dur:+x.dur||0,ext:x.ext==='mp4'?'mp4':'webm',asset:/^[A-Za-z0-9_-]{8,64}$/.test(String(x.asset||''))?String(x.asset):'',created:+x.created||0}}).filter(t=>t.asset);renderTakes()},()=>{})}).catch(()=>{})}
+/* ---------- Mix Room: edit vocals over a beat, autotune ---------- */
+const VX=[];let vxDB=null;
+function vxOpen(){return new Promise(res=>{try{const r=indexedDB.open('beatroom',1);r.onupgradeneeded=()=>r.result.createObjectStore('vox',{keyPath:'id'});r.onsuccess=()=>{vxDB=r.result;res(vxDB)};r.onerror=()=>res(null)}catch(e){res(null)}})}
+function vxTx(mode,fn){return new Promise(res=>{if(!vxDB)return res(null);try{const t=vxDB.transaction('vox',mode),q=fn(t.objectStore('vox'));t.oncomplete=()=>res(q&&q.result);t.onerror=()=>res(null)}catch(e){res(null)}})}
+async function vxLoad(){await vxOpen();const L=await vxTx('readonly',s=>s.getAll());if(L)L.forEach(v=>{if(v&&v.blob&&!VX.find(x=>x.id===v.id))VX.push(v)});VX.sort((a,b)=>b.created-a.created);mxList()}
+async function vxAdd(v){VX.unshift(v);mxList();await vxTx('readwrite',s=>s.put(v))}
+async function vxDel(id){const i=VX.findIndex(v=>v.id===id);if(i>=0)VX.splice(i,1);await vxTx('readwrite',s=>s.delete(id));if(MX.v&&MX.v.id===id){mxStop();MX.v=null;MX.raw=MX.tuned=MX.track=null;mxUI()}mxList()}
+const MX={v:null,beat:null,raw:null,tuned:null,track:null,tk:'',playing:false,at:0,t0:0,nodes:null,bus:null,busy:false,picking:false,drag:false,last:null,
+ s:{tune:'off',key:'auto',scale:'minor',tone:'studio',rev:45,echo:0,bv:70,vv:100,nud:0}};
+try{const o=JSON.parse(localStorage.getItem('br-mx')||'{}');for(const k in MX.s)if(k in o&&typeof o[k]===typeof MX.s[k])MX.s[k]=o[k]}catch(e){}
+const mxStore=()=>{try{localStorage.setItem('br-mx',JSON.stringify(MX.s))}catch(e){}};
+const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],SCALES={minor:[0,2,3,5,7,8,10],major:[0,2,4,5,7,9,11],chrom:[0,1,2,3,4,5,6,7,8,9,10,11]};
+const yieldUI=()=>new Promise(r=>setTimeout(r,0));
+function mxStat(t){const e=$('#mxStat');if(e)e.textContent=t}
+function mxAT(t){const e=$('#mxKeyN');if(e)e.textContent=t}
+function mono(ab){if(ab.numberOfChannels<2)return ab.getChannelData(0);const a=ab.getChannelData(0),b=ab.getChannelData(1),o=new Float32Array(a.length);for(let i=0;i<a.length;i++)o[i]=(a[i]+b[i])*.5;return o}
+/* pitch detection (YIN) on a down-sampled copy */
+async function pitchTrack(x,sr,prog){
+ const d=Math.max(1,Math.round(sr/12000)),dsr=sr/d,m=Math.floor(x.length/d),y=new Float32Array(m);
+ for(let i=0;i<m;i++){let s=0;for(let j=0;j<d;j++)s+=x[i*d+j];y[i]=s/d}
+ const W=Math.round(dsr*.03),hop=Math.round(dsr*.01),minL=Math.floor(dsr/900),maxL=Math.ceil(dsr/75);
+ const n=Math.max(0,Math.floor((m-W-maxL)/hop)),f0=new Float32Array(n),rms=new Float32Array(n),df=new Float32Array(maxL+2);let peak=0;
+ for(let k=0;k<n;k++){const i0=k*hop;let e=0;for(let j=0;j<W;j++)e+=y[i0+j]*y[i0+j];rms[k]=Math.sqrt(e/W);if(rms[k]>peak)peak=rms[k]}
+ const gate=Math.max(.003,peak*.05);
+ for(let k=0;k<n;k++){if(k%150===0){prog(k/n*.5);await yieldUI()}
+  if(rms[k]<gate)continue;const i0=k*hop;let run=0,found=-1;df[0]=1;
+  for(let t=1;t<=maxL+1;t++){let s=0;for(let j=0;j<W;j++){const q=y[i0+j]-y[i0+j+t];s+=q*q}run+=s;df[t]=run?s*t/run:1}
+  for(let t=minL;t<=maxL;t++){if(df[t]<.2){while(t<maxL&&df[t+1]<df[t])t++;found=t;break}}
+  if(found<1)continue;const a=df[found-1],b=df[found],c2=df[found+1],den=a-2*b+c2,sh=den?(a-c2)/(2*den):0;
+  f0[k]=dsr/(found+Math.max(-1,Math.min(1,sh)))}
+ const g=new Float32Array(n);for(let k=0;k<n;k++){if(!f0[k])continue;const w=[];for(let j=k-2;j<=k+2;j++)if(j>=0&&j<n&&f0[j])w.push(f0[j]);w.sort((p,q)=>p-q);g[k]=w[w.length>>1]}
+ return{f0:g,rms,hop:hop*d,W:W*d}}
+function detectKey(tr,scale){const h=new Float32Array(12);for(let k=0;k<tr.f0.length;k++)if(tr.f0[k]){const m=69+12*Math.log2(tr.f0[k]/440);h[((Math.round(m)%12)+12)%12]+=tr.rms[k]}
+ let best={s:-1,root:9};for(let r=0;r<12;r++){let s=0;SCALES[scale].forEach((iv,i)=>s+=h[(r+iv)%12]*(i===0?1.4:i===4?1.15:1));if(s>best.s)best={s,root:r}}return best.root}
+function tuneCurve(tr,root,scale,mode){const f0=tr.f0,n=f0.length,sh=new Float32Array(n),ok=SCALES[scale].map(i=>(i+root)%12);
+ const amt=mode==='hard'?1:.8,a=mode==='hard'?.65:.2;let prevT=null,cur=0;
+ for(let k=0;k<n;k++){let tgt=0;if(f0[k]){const m=69+12*Math.log2(f0[k]/440);let t=prevT;
+   if(t===null||Math.abs(m-t)>.62){let bd=9;for(let c=Math.round(m)-2;c<=Math.round(m)+2;c++)if(ok.includes(((c%12)+12)%12)&&Math.abs(c-m)<bd){bd=Math.abs(c-m);t=c}}
+   prevT=t;tgt=(t-m)*amt}else prevT=null;
+  cur+=(tgt-cur)*(f0[k]?a:.3);sh[k]=cur}
+ return sh}
+/* pitch shift that keeps timing (WSOLA + resampling) */
+async function pshift(x,sr,tr,sh,prog){
+ const N=x.length,out=new Float32Array(N),W=Math.round(sr*.032)&~1,H=W>>1,w=new Float32Array(W);for(let j=0;j<W;j++)w[j]=.5-.5*Math.cos(2*Math.PI*j/W);
+ const tol=Math.round(sr*.006),hop=tr.hop,c0=tr.W/2,nf=sh.length;
+ const ratioAt=s=>{if(!nf)return 1;const f=(s-c0)/hop,i=Math.floor(f);if(i<0)return Math.pow(2,sh[0]/12);if(i>=nf-1)return Math.pow(2,sh[nf-1]/12);const u=f-i;return Math.pow(2,(sh[i]*(1-u)+sh[i+1]*u)/12)};
+ const rd=p=>{const i=Math.floor(p);if(i<0||i>=N-1)return 0;return x[i]+(x[i+1]-x[i])*(p-i)};
+ let pIp=0,pR=1;
+ for(let k=0,os=0;os<N;k++,os+=H){if(k%250===0){prog(.5+os/N*.5);await yieldUI()}
+  const r=ratioAt(os+H),des=os+H-H*r;let ip=des;
+  if(k){const nat=pIp+H*pR;
+   if(Math.abs(r-1)<1e-4&&Math.abs(pR-1)<1e-4&&Math.abs(nat-des)<1)ip=nat;
+   else{let best=-Infinity;for(let dl=-tol;dl<=tol;dl+=3){const cand=des+dl;let s=0;for(let j=0;j<H;j+=6)s+=rd(nat+j*pR)*rd(cand+j*r);if(s>best){best=s;ip=cand}}}}
+  for(let j=0;j<W&&os+j<N;j++)out[os+j]+=rd(ip+j*r)*w[j];
+  pIp=ip;pR=r}
+ return out}
+async function mxVoc(){if(!MX.v)return null;
+ if(!MX.raw){mxStat('Loading your vocal…');try{MX.raw=await ctx().decodeAudioData(await MX.v.blob.arrayBuffer())}catch(e){mxStat('Couldn’t open that vocal.');return null}mxStat(MX.beat?'Ready — tap ▶ Play mix.':'Now choose the beat (step 2).');mxUI()}
+ const s=MX.s;if(s.tune==='off'){mxAT('');return MX.raw}
+ const key=`${s.tune}|${s.key}|${s.scale}`;if(MX.tuned&&MX.tk===key){mxKeyNote();return MX.tuned}
+ if(MX.busy)return null;MX.busy=true;mxBusy(true);const pr=p=>mxStat(`🎚 Autotuning your voice… ${Math.round(p*100)}%`);
+ try{const sr=MX.raw.sampleRate,x=mono(MX.raw);if(!MX.track)MX.track=await pitchTrack(x,sr,pr);
+  const root=s.scale==='chrom'?0:s.key==='auto'?detectKey(MX.track,s.scale):+s.key;MX.root=root;
+  const y=await pshift(x,sr,MX.track,tuneCurve(MX.track,root,s.scale,s.tune),pr);
+  const ab=ctx().createBuffer(1,y.length,sr);ab.getChannelData(0).set(y);MX.tuned=ab;MX.tk=key;mxStat('');mxKeyNote();return ab}
+ catch(e){console.error(e);mxStat('Autotune didn’t work on this vocal.');return null}
+ finally{MX.busy=false;mxBusy(false)}}
+function mxKeyNote(){const s=MX.s;mxAT(s.tune==='off'?'':s.scale==='chrom'?'Snapping to the nearest note':`Tuned to ${NOTES[MX.root]} ${s.scale}${s.key==='auto'?' (found automatically)':''}`)}
+function mxBusy(on){['#mxPlay','#mxSave'].forEach(i=>{const e=$(i);if(e)e.disabled=on})}
+async function mxBeatBuf(){const b=MX.beat;if(!b||b.type!=='file')return null;try{return await loadBuf(b)}catch(e){mxStat('Couldn’t load the beat.');return null}}
+const echoTime=()=>{const b=MX.beat;return b&&+b.bpm>0?Math.min(1.5,60/b.bpm*.75):.33};
+function mxFx(n){if(!n)return;const s=MX.s,v=VOX[s.tone]||VOX.studio;if(n.bG)n.bG.gain.value=s.bv/100;if(n.vG)n.vG.gain.value=s.vv/100;
+ if(n.fx){n.fx.raw.gain.value=v.raw;n.fx.proc.gain.value=v.proc;n.fx.wet.gain.value=s.rev/100*.6}if(n.es)n.es.gain.value=s.echo/100*.5}
+function mxBuild(c,out,when,at,vbuf,beatBuf){const s=MX.s,b=MX.beat,n={};
+ const bG=c.createGain();bG.connect(out);n.bG=bG;
+ if(b){if(b.type==='file'){if(beatBuf&&at<beatBuf.duration){const src=c.createBufferSource();src.buffer=beatBuf;src.connect(bG);src.start(when,at);n.bs=src}}
+  else{const syn=new Synth(c,bG);syn.out.gain.value=b.lvl||1;const sd=sdOf(b),total=b.bars*16;
+   for(let st=Math.max(0,Math.ceil(at/sd-1e-6));st<total;st++){try{GEN[b.gk].play(syn,b,Math.floor(st/16),st%16,when+st*sd-at,sd)}catch(e){}}n.syn=syn}}
+ if(vbuf){const src=c.createBufferSource();src.buffer=vbuf;const vG=c.createGain(),fx=buildVox(c);src.connect(vG);vG.connect(fx.in);fx.out.connect(out);
+  const es=c.createGain(),dl=c.createDelay(2),fb=c.createGain(),lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=3200;dl.delayTime.value=echoTime();fb.gain.value=.38;
+  fx.out.connect(es);es.connect(dl);dl.connect(lp);lp.connect(fb);fb.connect(dl);lp.connect(out);Object.assign(n,{vs:src,vG,fx,es});
+  const vo=at+(MX.v.lead||0)-s.nud/1000;if(vo>=0){if(vo<vbuf.duration)src.start(when,vo)}else src.start(when-vo,0)}
+ mxFx(n);return n}
+function mxDur(){const b=MX.beat;let bd=0;if(b)bd=b.type==='file'?(b.buf?b.buf.duration:(+b.dur||0)):(+b.dur||0);
+ const vd=MX.v?(MX.raw?MX.raw.duration:(+MX.v.dur||0))-(MX.v.lead||0)+MX.s.nud/1000:0;return Math.max(bd,vd,0)}
+function mxPos(){return MX.playing&&P.ctx?Math.max(0,P.ctx.currentTime-MX.t0):MX.at}
+async function mxPlay(){if(MX.playing){mxStop();return}if(!MX.v){mxStat('Pick a vocal first (step 1).');return}
+ if(P.playing)pause();const c=ctx();iosUnlock&&iosUnlock();const vb=await mxVoc();if(!vb)return;const bb=await mxBeatBuf();
+ if(MX.at>=mxDur()-.05)MX.at=0;MX.bus=c.createGain();MX.bus.connect(P.master);const when=c.currentTime+.08;
+ MX.nodes=mxBuild(c,MX.bus,when,MX.at,vb,bb);MX.t0=when-MX.at;MX.playing=true;mxUI();requestAnimationFrame(mxTick)}
+function mxStop(){if(!MX.playing)return;MX.at=Math.min(mxPos(),mxDur());MX.playing=false;const bus=MX.bus,n=MX.nodes||{};MX.bus=MX.nodes=null;
+ try{bus.gain.setTargetAtTime(0,P.ctx.currentTime,.015)}catch(e){}
+ setTimeout(()=>{['bs','vs'].forEach(k=>{try{n[k]&&n[k].stop()}catch(e){}});try{n.syn&&n.syn.out.disconnect()}catch(e){}try{bus.disconnect()}catch(e){}},150);mxUI()}
+function mxTick(){if(!MX.playing)return;if(mxPos()>=mxDur()){mxStop();MX.at=0;mxUI();return}mxTime();requestAnimationFrame(mxTick)}
+let mxRT=null;function mxRestart(){clearTimeout(mxRT);if(!MX.playing)return;mxRT=setTimeout(()=>{if(MX.playing){mxStop();mxPlay()}},250)}
+function wavBlob(ab){const ch=ab.numberOfChannels,n=ab.length,sr=ab.sampleRate,buf=new ArrayBuffer(44+n*ch*2),v=new DataView(buf);let p=0;
+ const S=t=>{for(let i=0;i<t.length;i++)v.setUint8(p++,t.charCodeAt(i))},U32=x=>{v.setUint32(p,x,true);p+=4},U16=x=>{v.setUint16(p,x,true);p+=2};
+ S('RIFF');U32(36+n*ch*2);S('WAVE');S('fmt ');U32(16);U16(1);U16(ch);U32(sr);U32(sr*ch*2);U16(ch*2);U16(16);S('data');U32(n*ch*2);
+ const d=[];for(let c=0;c<ch;c++)d.push(ab.getChannelData(c));for(let i=0;i<n;i++)for(let c=0;c<ch;c++){const x=Math.max(-1,Math.min(1,d[c][i]));v.setInt16(p,x<0?x*32768:x*32767,true);p+=2}
+ return new Blob([buf],{type:'audio/wav'})}
+async function mxSave(){if(!MX.v||MX.busy)return;mxStop();const vb=await mxVoc();if(!vb)return;const bb=await mxBeatBuf();
+ const OC=window.OfflineAudioContext||window.webkitOfflineAudioContext;if(!OC){mxStat('Saving mixes isn’t supported in this browser.');return}
+ const sr=44100,dur=Math.min(600,mxDur()+(MX.s.echo||MX.s.rev?1.5:.3));MX.busy=true;mxBusy(true);mxStat('💾 Mixing your track…');
+ try{const oc=new OC(2,Math.ceil(dur*sr),sr),c1=oc.createDynamicsCompressor(),lim=oc.createDynamicsCompressor();c1.threshold.value=-14;c1.ratio.value=3;lim.threshold.value=-3;lim.ratio.value=20;lim.attack.value=.002;
+  c1.connect(lim);lim.connect(oc.destination);const bus=oc.createGain();bus.connect(c1);mxBuild(oc,bus,0,0,vb,bb);
+  const ab=await oc.startRendering(),blob=wavBlob(ab),b=MX.beat;
+  const t={id:'l'+Date.now(),title:(b?b.title:MX.v.title)+' – mix',genre:b&&GEN[b.gk]?b.gk:(GEN[MX.v.genre]?MX.v.genre:'drill'),when:when(),dur:ab.duration,ext:'wav',blob,url:URL.createObjectURL(blob),created:Date.now()};
+  LTAKES.unshift(t);renderTakes();MX.last=t;$('#mxDl').hidden=false;mxStat('Saved ✓ It’s in Studio → My recordings too. Tap “Save to phone” to keep it.')}
+ catch(e){console.error(e);mxStat('Couldn’t make the mix on this phone.')}
+ finally{MX.busy=false;mxBusy(false)}}
+async function mxDownload(){const t=MX.last;if(!t)return;const name=`${t.title}.wav`;
+ try{if(downloads){await downloads.save({filename:name,data:t.blob});mxStat('Saved to your phone ✓');return}const a=document.createElement('a');a.href=t.url;a.download=name;document.body.append(a);a.click();a.remove()}catch(e){}}
+function mxOpen(v){mxStop();MX.v=v;MX.raw=MX.tuned=MX.track=null;MX.tk='';MX.at=0;$('#mxDl').hidden=true;
+ const b=v.beatId&&byId(v.beatId);if(b)mxSetBeat(b);mxList();mxUI();mxStat(b||MX.beat?'Tap ▶ Play mix to hear it.':'Now choose the beat (step 2).');mxVoc().then(()=>mxUI())}
+function mxSetBeat(b){if(!b)return;mxStop();MX.beat=b;mxUI();if(b.type==='file'&&!b.buf)loadBuf(b).then(()=>mxUI()).catch(()=>{})}
+function mxList(){const box=$('#mxList');if(!box)return;
+ if(!VX.length){box.innerHTML='<div class="empty">No vocals yet. Record a take in the Studio — your voice is saved here on its own — or upload a vocal below.</div>';return}
+ box.innerHTML=VX.map(v=>{const g=GEN[v.genre]||GEN.drill,on=MX.v&&MX.v.id===v.id;return `<div class="take mxv${on?' on':''}" style="--c:${g.col}" data-vx="${esc(v.id)}"><div class="r"><b>${esc(v.title)}</b><span class="count">${esc(v.when||'')} · ${fmt(v.dur||0)}</span></div><div class="acts" style="margin:0"><button class="btn sm${on?' pri':''}" data-vxo="1">${on?'✓ Editing':'Edit this'}</button><button class="btn sm" data-vxd="1">Delete</button></div></div>`}).join('')}
+function mxTime(){const p=mxPos(),d=mxDur(),t=$('#mxT');if(t)t.textContent=fmt(p)+' / '+fmt(d);if(!MX.drag)$('#mxSeek').value=d?Math.round(Math.min(1,p/d)*1000):0}
+function mxUI(){const b=MX.beat,bx=$('#mxBeat');if(!bx)return;
+ if(b){bx.style.setProperty('--c',b.col);bx.innerHTML=`<b>${esc(b.title)}</b><span class="meta">${metaHTML(b)}</span>`}else bx.innerHTML='<span class="count">No beat chosen yet</span>';
+ $('#mxPlay').textContent=MX.playing?'■ Stop':'▶ Play mix';$('#mxEd').classList.toggle('dim',!MX.v);const s=MX.s;
+ document.querySelectorAll('[data-mat]').forEach(e=>e.classList.toggle('on',e.dataset.mat===s.tune));
+ document.querySelectorAll('[data-msc]').forEach(e=>e.classList.toggle('on',e.dataset.msc===s.scale));
+ document.querySelectorAll('[data-mtone]').forEach(e=>e.classList.toggle('on',e.dataset.mtone===s.tone));
+ $('#mxKeyRow').hidden=s.tune==='off';$('#mxKey').value=s.key;$('#mxKey').disabled=s.scale==='chrom';
+ [['rev','%'],['echo','%'],['bv','%'],['vv','%'],['nud',' ms']].forEach(([k,u])=>{$('#mx_'+k).value=s[k];$('#mx_'+k+'V').textContent=(k==='nud'&&s[k]>0?'+':'')+s[k]+u});mxTime()}
+(function mxBind(){
+ $('#mxKey').innerHTML='<option value="auto">Auto (find my key)</option>'+NOTES.map((n,i)=>`<option value="${i}">${n}</option>`).join('');
+ $('#mxPlay').onclick=mxPlay;$('#mxSave').onclick=mxSave;$('#mxDl').onclick=mxDownload;$('#mxPickB').onclick=()=>{MX.picking=true;openPicker()};
+ const retune=async()=>{mxStore();mxUI();if(!MX.v)return;const was=MX.playing;if(was)mxStop();const r=await mxVoc();mxUI();if(was&&r)mxPlay()};
+ document.querySelectorAll('[data-mat]').forEach(e=>e.onclick=()=>{if(MX.busy)return;MX.s.tune=e.dataset.mat;retune()});
+ document.querySelectorAll('[data-msc]').forEach(e=>e.onclick=()=>{if(MX.busy)return;MX.s.scale=e.dataset.msc;retune()});
+ $('#mxKey').onchange=()=>{if(MX.busy){$('#mxKey').value=MX.s.key;return}MX.s.key=$('#mxKey').value;retune()};
+ document.querySelectorAll('[data-mtone]').forEach(e=>e.onclick=()=>{MX.s.tone=e.dataset.mtone;mxFx(MX.nodes);mxStore();mxUI()});
+ ['rev','echo','bv','vv','nud'].forEach(k=>{const el=$('#mx_'+k);el.oninput=()=>{MX.s[k]=+el.value;mxFx(MX.nodes);mxStore();mxUI();if(k==='nud')mxRestart()}});
+ document.querySelectorAll('[data-mnud]').forEach(e=>e.onclick=()=>{MX.s.nud=Math.max(-500,Math.min(500,MX.s.nud+ +e.dataset.mnud));mxStore();mxUI();mxRestart()});
+ const sk=$('#mxSeek');sk.oninput=()=>{MX.drag=true;const d=mxDur();$('#mxT').textContent=fmt(sk.value/1000*d)+' / '+fmt(d)};
+ sk.onchange=()=>{MX.drag=false;const at=sk.value/1000*mxDur();if(MX.playing){mxStop();MX.at=at;mxPlay()}else{MX.at=at;mxUI()}};
+ $('#mxList').addEventListener('click',e=>{const bt=e.target.closest('[data-vxo],[data-vxd]');if(!bt)return;const v=VX.find(x=>x.id===bt.closest('[data-vx]').dataset.vx);if(!v)return;
+  if(bt.dataset.vxo){mxOpen(v);return}
+  if(bt.dataset.sure!=='1'){bt.dataset.sure='1';bt.textContent='Tap again to delete';setTimeout(()=>{if(bt.isConnected){bt.dataset.sure='';bt.textContent='Delete'}},4000);return}vxDel(v.id)});
+ $('#mxFile').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;mxStat('Adding your vocal…');
+  try{const ab=await ctx().decodeAudioData(await f.arrayBuffer()),b=MX.beat;const v={id:'v'+Date.now(),title:f.name.replace(/\.[^.]+$/,'').slice(0,80)||'My vocal',beatId:b?b.id:'',genre:b?b.gk:'drill',when:when(),dur:ab.duration,lead:0,blob:f,created:Date.now()};
+   await vxAdd(v);mxOpen(v);MX.raw=ab;mxUI();mxStat('Added ✓ '+(MX.beat?'Tap ▶ Play mix. Use “Line up” if it’s not in time.':'Now choose the beat (step 2).'))}
+  catch(err){mxStat('Couldn’t open that file — try an MP3 or M4A.')}};
+ mxUI();vxLoad()})();
 /* ---------- events ---------- */
 document.addEventListener('click',e=>{const tk=e.target.closest('[data-tsave],[data-tdel]');if(tk){takeAction(tk,tk.dataset.tsave?'save':'del');return}const t=e.target.closest('[data-act],[data-sc],[data-pick]');if(!t)return;const d=t.dataset;
  if(d.sc){scat=d.sc;renderPicker();return}
- if(d.pick){select(byId(d.pick));closePicker();return}
+ if(d.pick){if(MX.picking)mxSetBeat(byId(d.pick));else select(byId(d.pick));closePicker();return}
  const row=t.closest('.row');if(!row)return;const b=byId(row.dataset.id);
  if(d.act==='play'){P.queue=lastList.map(x=>x.id);toggle(b)}else if(d.act==='del'){delBeat(b,t)}else if(d.act==='save'){saveLocal(b,t)}else if(d.act==='ren'){startRename(b,row)}else{select(b);location.hash='studio'}});
 $('#fplay').onclick=()=>{if(P.b&&P.b.gk===cat){toggle(P.b);return}if(!lastList.length)return;P.queue=lastList.map(b=>b.id);toggle(lastList[0])};
@@ -1049,9 +1240,10 @@ function skip(d){const b=P.b;if(!b||!b.dur)return;const t=Math.max(0,Math.min(b.
 $('#skB').onclick=()=>skip(-10);$('#skF').onclick=()=>skip(10);
 tr.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'){e.preventDefault();skip(-5)}else if(e.key==='ArrowRight'){e.preventDefault();skip(5)}});
 document.addEventListener('keydown',e=>{if(e.code==='Space'&&!/INPUT|TEXTAREA|BUTTON|SELECT|SUMMARY/.test(e.target.tagName)&&P.b){e.preventDefault();toggle(P.b)}});
-function route(){let v=(location.hash||'').slice(1);if(!v)v='home';if(!ORDER.includes(v)&&!['studio','maker','home'].includes(v))v=cat;
+function route(){let v=(location.hash||'').slice(1);if(!v)v='home';if(!ORDER.includes(v)&&!['studio','maker','home','mix'].includes(v))v=cat;
  if(P.beatGain&&!rec.r)P.beatGain.gain.value=(v==='studio')?MIXV.beat:1;
- view=v==='studio'?'studio':v==='maker'?'maker':v==='home'?'home':'beats';if(view==='home')renderHome();if(ORDER.includes(v)&&v!==cat){cat=v;q='';$('#q').value='';}
+ if(v!=='mix'&&typeof mxStop==='function')mxStop();
+ view=v==='studio'?'studio':v==='mix'?'mix':v==='maker'?'maker':v==='home'?'home':'beats';if(view==='home')renderHome();if(ORDER.includes(v)&&v!==cat){cat=v;q='';$('#q').value='';}
  if(view==='beats'){renderChans();renderList()}
  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+view));document.querySelectorAll('#tabs a').forEach(a=>{a.classList.toggle('on',a.dataset.v===v);if(a.dataset.v===v&&a.scrollIntoView)try{a.scrollIntoView({block:'nearest',inline:'center'})}catch(e){}});window.scrollTo(0,0)}
 addEventListener('hashchange',route);
