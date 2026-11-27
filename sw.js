@@ -1,6 +1,6 @@
 // BeatRoom service worker: lets the app open fast and install on phones.
 // Only this site's own files are cached; shared beats (Supabase) always come live from the internet.
-const CACHE = 'beatroom-v2';
+const CACHE = 'beatroom-v3';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './logo.svg'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
